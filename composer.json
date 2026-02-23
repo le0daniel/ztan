@@ -1,0 +1,27 @@
+{
+    "name": "le0daniel/assertions",
+    "description": "PHPstan compatible assertions similar to zod",
+    "type": "library",
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Le0daniel\\Assertions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Le0daniel\\Assertions\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leo Studer"
+        }
+    ]
+}
