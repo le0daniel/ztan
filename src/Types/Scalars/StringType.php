@@ -26,13 +26,18 @@ final readonly class StringType extends BaseType
     {
     }
 
-    public function execute(mixed $value, Context $context): string|Value
+    public static function coerceValue(mixed $value): mixed
     {
-        $value = $this->coerce ? match(gettype($value)) {
+        return match (gettype($value)) {
             'boolean' => $value ? 'true' : 'false',
             'integer', 'double', 'string' => (string) $value,
             default => $value,
-        } : $value;
+        };
+    }
+
+    public function execute(mixed $value, Context $context): string|Value
+    {
+        $value = $this->coerce ? self::coerceValue($value) : $value;
 
         if (!is_string($value)) {
             $context->addIssue(new Issue("Expected string."));
@@ -59,9 +64,6 @@ final readonly class StringType extends BaseType
     //     ]);
     // }
 
-    /**
-     * @return StringType
-     */
     // public function notEmpty(): StringType
     // {
     //     return clone($this, [

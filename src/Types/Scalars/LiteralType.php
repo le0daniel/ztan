@@ -10,49 +10,38 @@ use Le0daniel\Assertions\Data\Value;
 use UnitEnum;
 
 /**
- * @template T of UnitEnum
+ * @template T of string|int|float|bool|UnitEnum
  * @extends BaseType<T>
  */
-final readonly class EnumType extends BaseType
+final readonly class LiteralType extends BaseType
 {
     /**
-     * @param class-string<T> $enumClass
+     * @param T $literal
      * @param list<Pipe<T>> $pipeline
      */
     public function __construct(
-        private string $enumClass,
+        private string|int|float|bool|UnitEnum $literal,
         private array $pipeline = [],
         private bool $coerce = false,
-    )
-    {
+    ) {
     }
 
     /**
-     * @template E of UnitEnum
-     * @param class-string<E> $enumClass
+     * @return T|Value::INVALID
      */
-    public static function coerceValue(string $enumClass, mixed $value): mixed
-    {
-        if (!is_string($value)) {
-            return $value;
-        }
-
-        foreach ($enumClass::cases() as $case) {
-            if ($case->name === $value) {
-                return $case;
-            }
-        }
-
-        return $value;
-    }
-
     public function execute(mixed $value, Context $context): mixed
     {
         if ($this->coerce) {
-            $value = self::coerceValue($this->enumClass, $value);
+            $value = match (true) {
+                is_string($this->literal) => StringType::coerceValue($value),
+                is_int($this->literal) => IntType::coerceValue($value),
+                is_float($this->literal) => FloatType::coerceValue($value),
+                is_bool($this->literal) => BoolType::coerceValue($value),
+                $this->literal instanceof UnitEnum => EnumType::coerceValue($this->literal::class, $value),
+            };
         }
 
-        if (!$value instanceof $this->enumClass) {
+        if ($value !== $this->literal) {
             $context->addIssue(new Issue("Invalid value."));
             return Value::INVALID;
         }
@@ -60,7 +49,7 @@ final readonly class EnumType extends BaseType
         foreach ($this->pipeline as $pipe) {
             $value = $pipe->execute($value, $context);
             if (Value::isInvalid($value)) {
-                return $value;
+                return Value::INVALID;
             }
         }
 

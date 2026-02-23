@@ -23,14 +23,19 @@ final readonly class BoolType extends BaseType
     {
     }
 
+    public static function coerceValue(mixed $value): mixed
+    {
+        return match (true) {
+            $value === 1, $value === 1.0, $value === 'true' => true,
+            $value === 0, $value === 0.0, $value === 'false' => false,
+            default => $value,
+        };
+    }
+
     public function execute(mixed $value, Context $context): bool|Value
     {
         if ($this->coerce) {
-            $value = match (true) {
-                $value === 1, $value === 1.0, $value === 'true' => true,
-                $value === 0, $value === 0.0, $value === 'false' => false,
-                default => $value,
-            };
+            $value = self::coerceValue($value);
         }
 
         if (!is_bool($value)) {

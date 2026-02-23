@@ -23,15 +23,20 @@ final readonly class FloatType extends BaseType
     {
     }
 
-    public function execute(mixed $value, Context $context): float|Value
+    public static function coerceValue(mixed $value): mixed
     {
-        $value = $this->coerce ? match (true) {
+        return match (true) {
             is_float($value) => $value,
             is_int($value) => (float) $value,
             is_bool($value) => $value ? 1.0 : 0.0,
             is_string($value) && is_numeric($value) => (float) $value,
             default => $value,
-        } : $value;
+        };
+    }
+
+    public function execute(mixed $value, Context $context): float|Value
+    {
+        $value = $this->coerce ? self::coerceValue($value) : $value;
 
         if (!is_float($value)) {
             $context->addIssue(new Issue("Expected float."));

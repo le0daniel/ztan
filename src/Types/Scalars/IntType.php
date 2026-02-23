@@ -23,15 +23,20 @@ final readonly class IntType extends BaseType
     {
     }
 
-    public function execute(mixed $value, Context $context): int|Value
+    public static function coerceValue(mixed $value): mixed
     {
-        $value = $this->coerce ? match (true) {
+        return match (true) {
             is_int($value) => $value,
             is_float($value) => (int) $value,
             is_bool($value) => $value ? 1 : 0,
             is_string($value) && is_numeric($value) => (int) $value,
             default => $value,
-        } : $value;
+        };
+    }
+
+    public function execute(mixed $value, Context $context): int|Value
+    {
+        $value = $this->coerce ? self::coerceValue($value) : $value;
 
         if (!is_int($value)) {
             $context->addIssue(new Issue("Expected integer."));
