@@ -49,51 +49,51 @@ final readonly class StringType extends BaseType
         return $value;
     }
 
-    public function trim(): StringType
-    {
-        return clone($this, [
-            'pipeline' => [
-                ... $this->pipeline,
-                new TransformPipe(fn (string $value) => trim($value)),
-            ]
-        ]);
-    }
+    // public function trim(): StringType
+    // {
+    //     return clone($this, [
+    //         'pipeline' => [
+    //             ... $this->pipeline,
+    //             new TransformPipe(fn (string $value) => trim($value)),
+    //         ]
+    //     ]);
+    // }
 
     /**
      * @return StringType
      */
-    public function notEmpty(): StringType
-    {
-        return clone($this, [
-            'pipeline' => [
-                ... $this->pipeline,
-                new Constraint(
-                    static function (string $value): bool {
-                        return trim($value) !== '';
-                    },
-                    'String must not be empty.'
-                )
-            ]
-        ]);
-    }
+    // public function notEmpty(): StringType
+    // {
+    //     return clone($this, [
+    //         'pipeline' => [
+    //             ... $this->pipeline,
+    //             new Constraint(
+    //                 static function (string $value): bool {
+    //                     return trim($value) !== '';
+    //                 },
+    //                 'String must not be empty.'
+    //             )
+    //         ]
+    //     ]);
+    // }
 
     /**
      * @param positive-int $length
      */
-    public function minLength(int $length, bool $including = true): StringType
-    {
-        return clone($this, [
-            'pipeline' => [
-                ... $this->pipeline,
-                new Constraint(
-                    static function (string $value) use ($length, $including): bool {
-                        return $including
-                            ? mb_strlen($value) >= $length
-                            : mb_strlen($value) > $length;
-                    },
-                    "String must be at least {$length} characters long."
-                ),
-            ]
-        ]);
-    }
+    // public function minLength(int $length, bool $including = true): StringType
+    // {
+    //     return clone($this, [
+    //         'pipeline' => [
+    //             ... $this->pipeline,
+    //             new Constraint(
+    //                 static function (string $value) use ($length, $including): bool {
+    //                     return $including
+    //                         ? mb_strlen($value) >= $length
+    //                         : mb_strlen($value) > $length;
+    //                 },
+    //                 "String must be at least {$length} characters long."
+    //             ),
+    //         ]
+    //     ]);
+    // }
 }
