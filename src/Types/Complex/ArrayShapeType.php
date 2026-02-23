@@ -15,6 +15,19 @@ use Le0daniel\Assertions\Data\Value;
 final readonly class ArrayShapeType extends BaseType
 {
     /**
+     * Expects a key-value array where the key is the property name and the value is the property type.
+     * Adding a ? at the end of the property name makes it optional
+     * Example:
+     *
+     * ```
+     * [
+     *     'name' => new StringType(),
+     *     'age' => new IntType(),
+     *     'address?' => new StringType(),
+     * ]
+     * // => array{name: string, age: int, address?: string}
+     * ```
+     *
      * @param TProperties $properties
      */
     public function __construct(

@@ -6,26 +6,27 @@ final class Debug
 {
     public static function getType(mixed $value): string
     {
-        $type = gettype($value);
-
-        if (is_object($value)) {
-            return self::getObjectType($value);
-        }
-
-        return match ($type) {
-            'boolean' => 'bool',
-            'integer' => 'int',
-            'double' => 'float',
-            'string' => 'string',
-            'array' => 'array',
-            'resource' => 'resource',
-            'NULL' => 'NULL',
+        return match (true) {
+            is_object($value) => self::getObjectType($value),
+            is_bool($value) => 'bool<' . ($value ? 'true' : 'false') . '>',
+            is_int($value) => "int<{$value}>",
+            is_float($value) => "float<{$value}>",
+            is_string($value) => "string<'" . self::truncate($value) . "'>",
+            is_array($value) => 'array',
+            is_resource($value) => 'resource',
+            is_null($value) => 'NULL',
             default => "unknown",
         };
     }
 
+    private static function truncate(string $string, int $maxLength = 50): string
+    {
+        return mb_strlen($string) > $maxLength ? mb_substr($string, 0, $maxLength - 3) . '...' : $string;
+    }
+
     private static function getObjectType(object $value): string
     {
-        return get_class($value);
+        $className = get_class($value);
+        return "object<{$className}>";
     }
 }
