@@ -1,0 +1,5 @@
+services:
+	-
+		class: Le0daniel\Assertions\PhpStan\AssertionResolver
+		tags:
+			- phpstan.phpDoc.typeNodeResolverExtension

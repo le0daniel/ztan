@@ -1,0 +1,18 @@
+includes:
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - extension.neon
+
+parameters:
+    reportPossiblyNonexistentConstantArrayOffset: true
+
+    strictRules:
+        disallowedEmpty: false
+
+    paths:
+        - src/
+
+    level: 10
+
+#    ignoreErrors:
+#    excludePaths:
+
