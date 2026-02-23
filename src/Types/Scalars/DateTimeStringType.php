@@ -27,14 +27,14 @@ final readonly class DateTimeStringType extends BaseType
     public function execute(mixed $value, Context $context): DateTimeImmutable|Value
     {
         if (!is_string($value)) {
-            $context->addIssue(new Issue("Expected string."));
+            $context->addIssue(Issue::invalidType("Expected string.", $value));
             return Value::INVALID;
         }
 
         $dateTime = DateTimeImmutable::createFromFormat($this->format, $value);
 
         if ($dateTime === false || $dateTime->format($this->format) !== $value) {
-            $context->addIssue(new Issue("Expected datetime string matching format: {$this->format}."));
+            $context->addIssue(Issue::invalidValue("Expected datetime string matching format: {$this->format}.", $value, metadata: ['format' => $this->format]));
             return Value::INVALID;
         }
 

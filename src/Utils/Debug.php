@@ -2,6 +2,8 @@
 
 namespace Le0daniel\Assertions\Utils;
 
+use UnitEnum;
+
 final class Debug
 {
     public static function getType(mixed $value): string
@@ -27,6 +29,11 @@ final class Debug
     private static function getObjectType(object $value): string
     {
         $className = get_class($value);
+
+        if ($value instanceof UnitEnum) {
+            return "enum<{$className}::{$value->name}>";
+        }
+
         return "object<{$className}>";
     }
 }

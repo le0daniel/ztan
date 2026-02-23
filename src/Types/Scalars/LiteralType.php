@@ -42,7 +42,7 @@ final readonly class LiteralType extends BaseType
         }
 
         if ($value !== $this->literal) {
-            $context->addIssue(new Issue("Invalid value."));
+            $context->addIssue(Issue::invalidValue("Invalid value.", $value, metadata: ['expected' => $this->literal]));
             return Value::INVALID;
         }
 

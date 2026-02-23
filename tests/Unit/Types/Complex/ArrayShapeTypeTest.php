@@ -36,8 +36,8 @@ final class ArrayShapeTypeTest extends TestCase
         $result = $type->execute('not-an-array', $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Value is not an array.', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Value is not an array.', $context->issues[0]->message);
     }
 
     public function testMissingRequiredPropertyErrorAtPath(): void
@@ -50,8 +50,9 @@ final class ArrayShapeTypeTest extends TestCase
         $result = $type->execute([], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['name'] ?? []);
-        self::assertSame('Property name does not exist}', $context->issues['name'][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Property name is required.', $context->issues[0]->message);
+        self::assertSame('name', $context->issues[0]->getPathAsString());
     }
 
     public function testExtraKeysDropped(): void
@@ -122,7 +123,8 @@ final class ArrayShapeTypeTest extends TestCase
         $result = $type->execute(['user' => ['name' => 123]], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['user.name'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame('user.name', $context->issues[0]->getPathAsString());
     }
 
     public function testNonArrayAtNestedPositionIssueAtPath(): void
@@ -137,8 +139,9 @@ final class ArrayShapeTypeTest extends TestCase
         $result = $type->execute(['user' => 'not-an-array'], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['user'] ?? []);
-        self::assertSame('Value is not an array.', $context->issues['user'][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('user', $context->issues[0]->getPathAsString());
+        self::assertSame('Value is not an array.', $context->issues[0]->message);
     }
 
     public function testNestedRecordTypeInShapePasses(): void
@@ -164,7 +167,8 @@ final class ArrayShapeTypeTest extends TestCase
         $result = $type->execute(['tags' => ['a' => 123]], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['tags.a'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame('tags.a', $context->issues[0]->getPathAsString());
     }
 
     public function testCatchTypeComposition(): void
@@ -190,8 +194,9 @@ final class ArrayShapeTypeTest extends TestCase
         $result = $type->execute(['first' => 1, 'second' => 2], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['first'] ?? []);
-        self::assertCount(1, $context->issues['second'] ?? []);
+        self::assertCount(2, $context->issues);
+        self::assertSame('first', $context->issues[0]->getPathAsString());
+        self::assertSame('second', $context->issues[1]->getPathAsString());
     }
 
     public function testSafeParseIsPartialWhenCatchBarrierReached(): void

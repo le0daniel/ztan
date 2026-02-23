@@ -55,8 +55,8 @@ final class StringTypeTest extends TestCase
         $result = $type->execute($input, $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Expected string.', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Expected string.', $context->issues[0]->message);
     }
 
     /**
@@ -102,7 +102,7 @@ final class StringTypeTest extends TestCase
         $result = $type->execute($input, $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Expected string.', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Expected string.', $context->issues[0]->message);
     }
 }

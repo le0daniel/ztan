@@ -40,7 +40,7 @@ final readonly class StringType extends BaseType
         $value = $this->coerce ? self::coerceValue($value) : $value;
 
         if (!is_string($value)) {
-            $context->addIssue(new Issue("Expected string."));
+            $context->addIssue(Issue::invalidType("Expected string.", $value));
             return Value::INVALID;
         }
 

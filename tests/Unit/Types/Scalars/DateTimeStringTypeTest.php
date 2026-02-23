@@ -65,7 +65,7 @@ final class DateTimeStringTypeTest extends TestCase
         $result = $type->execute($input, $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame($expectedMessage, $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame($expectedMessage, $context->issues[0]->message);
     }
 }

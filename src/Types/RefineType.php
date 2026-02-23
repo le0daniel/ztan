@@ -35,7 +35,7 @@ final readonly class RefineType extends BaseType
         }
 
         if (!($this->refiner)($value)) {
-            $context->addIssue(new Issue($this->message));
+            $context->addIssue(Issue::custom($this->message, $value));
             return Value::INVALID;
         }
 

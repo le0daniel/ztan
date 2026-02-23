@@ -5,7 +5,7 @@ namespace Le0daniel\Assertions\Data;
 final readonly class ParseError
 {
     /**
-     * @param array<string, list<Issue>> $issues
+     * @param list<Issue> $issues
      */
     public function __construct(
         public array $issues,

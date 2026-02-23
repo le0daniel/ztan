@@ -27,8 +27,9 @@ final readonly class RecordType extends BaseType
     public function execute(mixed $value, Context $context): array|Value
     {
         if (!is_array($value)) {
-            $context->addIssue(new Issue(
-                "Expected array",
+            $context->addIssue(Issue::invalidType(
+                "Expected array.",
+                $value,
             ));
             return Value::INVALID;
         }
@@ -37,8 +38,9 @@ final readonly class RecordType extends BaseType
         $validated = [];
         foreach ($value as $key => $itemValue) {
             if (!is_string($key)) {
-                $context->addIssue(new Issue(
-                    "Record key must be a string",
+                $context->addIssue(Issue::invalidType(
+                    "Record key must be a string.",
+                    $key,
                 ));
                 $hasIssues = true;
                 continue;

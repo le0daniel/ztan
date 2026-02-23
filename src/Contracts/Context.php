@@ -6,7 +6,7 @@ use Le0daniel\Assertions\Data\Issue;
 
 interface Context
 {
-    /** @var array<string, list<Issue>> */
+    /** @var list<Issue> */
     public array $issues { get; }
 
     public function addIssue(Issue $issue): void;

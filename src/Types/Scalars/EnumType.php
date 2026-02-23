@@ -53,7 +53,7 @@ final readonly class EnumType extends BaseType
         }
 
         if (!$value instanceof $this->enumClass) {
-            $context->addIssue(new Issue("Invalid value."));
+            $context->addIssue(Issue::invalidValue("Invalid value.", $value, metadata: ['expected_enum' => $this->enumClass]));
             return Value::INVALID;
         }
 

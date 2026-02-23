@@ -7,7 +7,7 @@ use Le0daniel\Assertions\Contracts\Context;
 final class ValidationContext implements Context
 {
     /**
-     * @param array<string, list<Issue>> $issues
+     * @param list<Issue> $issues
      * @param list<int|string> $path
      */
     public function __construct(
@@ -19,7 +19,7 @@ final class ValidationContext implements Context
 
     public function addIssue(Issue $issue): void
     {
-        $this->issues[$this->getPathAsString()][] = $issue;
+        $this->issues[] = $issue->withPath($this->path);
     }
 
     public function enterPath(int|string $path): void
@@ -32,11 +32,6 @@ final class ValidationContext implements Context
         array_pop($this->path);
     }
 
-    private function getPathAsString(): string
-    {
-        return implode('.', $this->path);
-    }
-
     public function cloneForProbing(): Context
     {
         return new self(path: $this->path);
@@ -44,11 +39,6 @@ final class ValidationContext implements Context
 
     public function mergeIssues(Context $other): void
     {
-        foreach ($other->issues as $path => $issues) {
-            $this->issues[$path] = [
-                ...($this->issues[$path] ?? []),
-                ...$issues,
-            ];
-        }
+        $this->issues = [...$this->issues, ...$other->issues];
     }
 }

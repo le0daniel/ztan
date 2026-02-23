@@ -43,8 +43,8 @@ final class RecordTypeTest extends TestCase
         $result = $type->execute('not-an-array', $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Expected array', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Expected array.', $context->issues[0]->message);
     }
 
     public function testInvalidValueRejected(): void
@@ -55,7 +55,8 @@ final class RecordTypeTest extends TestCase
         $result = $type->execute(['a' => 123], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['a'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame('a', $context->issues[0]->getPathAsString());
     }
 
     public function testNonStringKeyRejected(): void
@@ -66,8 +67,8 @@ final class RecordTypeTest extends TestCase
         $result = $type->execute([0 => 'val'], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Record key must be a string', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Record key must be a string.', $context->issues[0]->message);
     }
 
     public function testNestedRecordOfRecordsValid(): void
@@ -97,7 +98,8 @@ final class RecordTypeTest extends TestCase
         ], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['group1.a'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame('group1.a', $context->issues[0]->getPathAsString());
     }
 
     public function testShapeInsideRecordValid(): void
@@ -131,7 +133,8 @@ final class RecordTypeTest extends TestCase
         ], $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues['user1.name'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame('user1.name', $context->issues[0]->getPathAsString());
     }
 
     public function testSafeParseIsPartialWhenCatchBarrierReached(): void

@@ -39,7 +39,7 @@ final readonly class BoolType extends BaseType
         }
 
         if (!is_bool($value)) {
-            $context->addIssue(new Issue("Expected boolean."));
+            $context->addIssue(Issue::invalidType("Expected boolean.", $value));
             return Value::INVALID;
         }
 

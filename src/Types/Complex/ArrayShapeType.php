@@ -39,7 +39,7 @@ final readonly class ArrayShapeType extends BaseType
     public function execute(mixed $value, Context $context): array|Value
     {
         if (!is_array($value)) {
-            $context->addIssue(new Issue('Value is not an array.'));
+            $context->addIssue(Issue::invalidType("Value is not an array.", $value));
             return Value::INVALID;
         }
 
@@ -61,8 +61,9 @@ final readonly class ArrayShapeType extends BaseType
                         continue;
                     }
 
-                    $context->addIssue(new Issue(
-                        "Property {$propertyName} does not exist}",
+                    $context->addIssue(Issue::missingValue(
+                        "Property {$propertyName} is required.",
+                        metadata: ['property' => $propertyName],
                     ));
                     $hasIssues = true;
                     continue;

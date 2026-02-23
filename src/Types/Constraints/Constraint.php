@@ -33,7 +33,7 @@ final readonly class Constraint implements Pipe
             return $value;
         }
 
-        $context->addIssue(new Issue($this->message));
+        $context->addIssue(Issue::custom($this->message, $value));
         return Value::INVALID;
     }
 }

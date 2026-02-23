@@ -9,7 +9,7 @@ final readonly class ParseSuccess
 {
     /**
      * @param TValue $data
-     * @param array<string, list<Issue>> $issues
+     * @param list<Issue> $issues
      */
     public function __construct(
         public mixed $data,

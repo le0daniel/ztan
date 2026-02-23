@@ -39,7 +39,7 @@ final readonly class FloatType extends BaseType
         $value = $this->coerce ? self::coerceValue($value) : $value;
 
         if (!is_float($value)) {
-            $context->addIssue(new Issue("Expected float."));
+            $context->addIssue(Issue::invalidType("Expected float.", $value));
             return Value::INVALID;
         }
 

@@ -56,8 +56,8 @@ final class FloatTypeTest extends TestCase
         $result = $type->execute($input, $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Expected float.', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Expected float.', $context->issues[0]->message);
     }
 
     /**
@@ -108,7 +108,7 @@ final class FloatTypeTest extends TestCase
         $result = $type->execute($input, $context);
 
         self::assertSame(Value::INVALID, $result);
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('Expected float.', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Expected float.', $context->issues[0]->message);
     }
 }

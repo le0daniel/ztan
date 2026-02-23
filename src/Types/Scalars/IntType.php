@@ -39,7 +39,7 @@ final readonly class IntType extends BaseType
         $value = $this->coerce ? self::coerceValue($value) : $value;
 
         if (!is_int($value)) {
-            $context->addIssue(new Issue("Expected integer."));
+            $context->addIssue(Issue::invalidType("Expected integer.", $value));
             return Value::INVALID;
         }
 

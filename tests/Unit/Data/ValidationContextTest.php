@@ -3,6 +3,7 @@
 namespace Le0daniel\Assertions\Tests\Unit\Data;
 
 use Le0daniel\Assertions\Data\Issue;
+use Le0daniel\Assertions\Data\IssueType;
 use Le0daniel\Assertions\Data\ValidationContext;
 use PHPUnit\Framework\TestCase;
 
@@ -19,10 +20,11 @@ final class ValidationContextTest extends TestCase
     {
         $context = new ValidationContext();
 
-        $context->addIssue(new Issue('root error'));
+        $context->addIssue(Issue::custom('root error'));
 
-        self::assertCount(1, $context->issues[''] ?? []);
-        self::assertSame('root error', $context->issues[''][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('root error', $context->issues[0]->message);
+        self::assertSame([], $context->issues[0]->path);
     }
 
     public function testAddIssueAtNestedPath(): void
@@ -31,10 +33,11 @@ final class ValidationContextTest extends TestCase
         $context->enterPath('user');
         $context->enterPath('name');
 
-        $context->addIssue(new Issue('invalid name'));
+        $context->addIssue(Issue::custom('invalid name'));
 
-        self::assertCount(1, $context->issues['user.name'] ?? []);
-        self::assertSame('invalid name', $context->issues['user.name'][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('invalid name', $context->issues[0]->message);
+        self::assertSame(['user', 'name'], $context->issues[0]->path);
     }
 
     public function testLeavePathRestoresParent(): void
@@ -44,9 +47,10 @@ final class ValidationContextTest extends TestCase
         $context->enterPath('name');
         $context->leavePath();
 
-        $context->addIssue(new Issue('user error'));
+        $context->addIssue(Issue::custom('user error'));
 
-        self::assertCount(1, $context->issues['user'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame(['user'], $context->issues[0]->path);
     }
 
     public function testMultipleIssuesAtSamePath(): void
@@ -54,12 +58,12 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext();
         $context->enterPath('field');
 
-        $context->addIssue(new Issue('first'));
-        $context->addIssue(new Issue('second'));
+        $context->addIssue(Issue::custom('first'));
+        $context->addIssue(Issue::custom('second'));
 
-        self::assertCount(2, $context->issues['field']);
-        self::assertSame('first', $context->issues['field'][0]->message);
-        self::assertSame('second', $context->issues['field'][1]->message);
+        self::assertCount(2, $context->issues);
+        self::assertSame('first', $context->issues[0]->message);
+        self::assertSame('second', $context->issues[1]->message);
     }
 
     public function testIntegerPathSegment(): void
@@ -68,9 +72,10 @@ final class ValidationContextTest extends TestCase
         $context->enterPath('items');
         $context->enterPath(0);
 
-        $context->addIssue(new Issue('bad item'));
+        $context->addIssue(Issue::custom('bad item'));
 
-        self::assertCount(1, $context->issues['items.0'] ?? []);
+        self::assertCount(1, $context->issues);
+        self::assertSame(['items', 0], $context->issues[0]->path);
     }
 
     public function testCloneForProbingPreservesPath(): void
@@ -80,15 +85,16 @@ final class ValidationContextTest extends TestCase
         $context->enterPath('name');
 
         $probe = $context->cloneForProbing();
-        $probe->addIssue(new Issue('probe error'));
+        $probe->addIssue(Issue::custom('probe error'));
 
-        self::assertCount(1, $probe->issues['user.name'] ?? []);
+        self::assertCount(1, $probe->issues);
+        self::assertSame(['user', 'name'], $probe->issues[0]->path);
     }
 
     public function testCloneForProbingStartsWithNoIssues(): void
     {
         $context = new ValidationContext();
-        $context->addIssue(new Issue('original'));
+        $context->addIssue(Issue::custom('original'));
 
         $probe = $context->cloneForProbing();
 
@@ -101,7 +107,7 @@ final class ValidationContextTest extends TestCase
         $context->enterPath('field');
 
         $probe = $context->cloneForProbing();
-        $probe->addIssue(new Issue('probe only'));
+        $probe->addIssue(Issue::custom('probe only'));
 
         self::assertSame([], $context->issues);
     }
@@ -113,54 +119,56 @@ final class ValidationContextTest extends TestCase
 
         $probe = $context->cloneForProbing();
         $probe->enterPath('b');
-        $probe->addIssue(new Issue('deep'));
+        $probe->addIssue(Issue::custom('deep'));
 
         // Probe should have path a.b
-        self::assertCount(1, $probe->issues['a.b'] ?? []);
+        self::assertCount(1, $probe->issues);
+        self::assertSame(['a', 'b'], $probe->issues[0]->path);
 
         // Original path should still be just 'a'
-        $context->addIssue(new Issue('original'));
-        self::assertCount(1, $context->issues['a'] ?? []);
-        self::assertArrayNotHasKey('a.b', $context->issues);
+        $context->addIssue(Issue::custom('original'));
+        self::assertCount(1, $context->issues);
+        self::assertSame(['a'], $context->issues[0]->path);
     }
 
     public function testMergeIssuesCombinesBothContexts(): void
     {
         $context = new ValidationContext();
         $context->enterPath('a');
-        $context->addIssue(new Issue('from original'));
+        $context->addIssue(Issue::custom('from original'));
         $context->leavePath();
 
         $other = new ValidationContext();
         $other->enterPath('b');
-        $other->addIssue(new Issue('from other'));
+        $other->addIssue(Issue::custom('from other'));
         $other->leavePath();
 
         $context->mergeIssues($other);
 
-        self::assertCount(1, $context->issues['a']);
-        self::assertCount(1, $context->issues['b']);
-        self::assertSame('from original', $context->issues['a'][0]->message);
-        self::assertSame('from other', $context->issues['b'][0]->message);
+        self::assertCount(2, $context->issues);
+        self::assertSame('from original', $context->issues[0]->message);
+        self::assertSame(['a'], $context->issues[0]->path);
+        self::assertSame('from other', $context->issues[1]->message);
+        self::assertSame(['b'], $context->issues[1]->path);
     }
 
     public function testMergeIssuesAppendsToExistingPath(): void
     {
         $context = new ValidationContext();
         $context->enterPath('field');
-        $context->addIssue(new Issue('first'));
+        $context->addIssue(Issue::custom('first'));
         $context->leavePath();
 
         $other = new ValidationContext();
         $other->enterPath('field');
-        $other->addIssue(new Issue('second'));
+        $other->addIssue(Issue::custom('second'));
         $other->leavePath();
 
         $context->mergeIssues($other);
 
-        self::assertCount(2, $context->issues['field']);
-        self::assertSame('first', $context->issues['field'][0]->message);
-        self::assertSame('second', $context->issues['field'][1]->message);
+        self::assertCount(2, $context->issues);
+        self::assertSame('first', $context->issues[0]->message);
+        self::assertSame('second', $context->issues[1]->message);
     }
 
     public function testMergeIssuesDoesNotAffectSource(): void
@@ -168,27 +176,27 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext();
 
         $other = new ValidationContext();
-        $other->addIssue(new Issue('from other'));
+        $other->addIssue(Issue::custom('from other'));
 
         $context->mergeIssues($other);
 
         // Source should still have its issues untouched
-        self::assertCount(1, $other->issues['']);
+        self::assertCount(1, $other->issues);
 
         // Target should also have them now
-        self::assertCount(1, $context->issues['']);
+        self::assertCount(1, $context->issues);
     }
 
     public function testMergeEmptyContextIsNoop(): void
     {
         $context = new ValidationContext();
-        $context->addIssue(new Issue('existing'));
+        $context->addIssue(Issue::custom('existing'));
 
         $empty = new ValidationContext();
         $context->mergeIssues($empty);
 
         self::assertCount(1, $context->issues);
-        self::assertSame('existing', $context->issues[''][0]->message);
+        self::assertSame('existing', $context->issues[0]->message);
     }
 
     public function testCloneForProbingThenMergeBackRoundTrip(): void
@@ -197,14 +205,15 @@ final class ValidationContextTest extends TestCase
         $context->enterPath('user');
 
         $probe = $context->cloneForProbing();
-        $probe->addIssue(new Issue('probed issue'));
+        $probe->addIssue(Issue::custom('probed issue'));
 
         // Issues stay in probe, not in original
         self::assertSame([], $context->issues);
 
         // After merge, original gets them
         $context->mergeIssues($probe);
-        self::assertCount(1, $context->issues['user'] ?? []);
-        self::assertSame('probed issue', $context->issues['user'][0]->message);
+        self::assertCount(1, $context->issues);
+        self::assertSame('probed issue', $context->issues[0]->message);
+        self::assertSame(['user'], $context->issues[0]->path);
     }
 }
