@@ -44,13 +44,18 @@ final readonly class RecordType extends BaseType
                 continue;
             }
 
-            $validatedValue = $this->valueType->execute($itemValue, $context);
-            if (Value::isInvalid($validatedValue)) {
-                $hasIssues = true;
-                continue;
-            }
+            $context->enterPath($key);
+            try {
+                $validatedValue = $this->valueType->execute($itemValue, $context);
+                if (Value::isInvalid($validatedValue)) {
+                    $hasIssues = true;
+                    continue;
+                }
 
-            $validated[$key] = $validatedValue;
+                $validated[$key] = $validatedValue;
+            } finally {
+                $context->leavePath();
+            }
         }
 
         if ($hasIssues) {

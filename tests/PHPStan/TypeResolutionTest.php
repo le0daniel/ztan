@@ -5,12 +5,14 @@ namespace Le0daniel\Assertions\Tests\PHPStan;
 use PHPStan\Testing\TypeInferenceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-final class StringTypeTest extends TypeInferenceTestCase
+final class TypeResolutionTest extends TypeInferenceTestCase
 {
     /** @return iterable<mixed> */
     public static function dataFileAsserts(): iterable
     {
-        yield from self::gatherAssertTypes(__DIR__ . '/cases/string-type.php');
+        foreach (glob(__DIR__ . '/cases/*.php') as $file) {
+            yield from self::gatherAssertTypes($file);
+        }
     }
 
     #[DataProvider('dataFileAsserts')]

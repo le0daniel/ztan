@@ -100,6 +100,10 @@ final readonly class ArrayShapeTypeConstructorResolver implements DynamicStaticM
     private function resolvePropertiesFromGeneric(PhpStanType $callerType): ?PhpStanType
     {
         $propertiesType = $callerType->getTemplateType(ArrayShapeType::class, 'TProperties');
-        return $this->resolvePropertiesArray($propertiesType);
+        if ($propertiesType->getConstantArrays() === []) {
+            return null;
+        }
+
+        return $propertiesType;
     }
 }
