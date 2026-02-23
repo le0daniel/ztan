@@ -9,4 +9,9 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <source ignoreIndirectDeprecations="true">
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
 </phpunit>
