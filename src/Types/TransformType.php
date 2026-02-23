@@ -3,18 +3,19 @@
 namespace Le0daniel\Assertions\Types;
 
 use Closure;
-use Le0daniel\Assertions\Contracts\Type;
+use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
+use Le0daniel\Assertions\Contracts\Type;
 use Le0daniel\Assertions\Data\Value;
 
 /**
  * @template TValue
  * @template TTransformedValue
- * @implements Type<TTransformedValue>
+ * @extends BaseType<TTransformedValue>
  *
  * @phpstan-type TransformFn (Closure(TValue): TTransformedValue)
  */
-final readonly class TransformType implements Type
+final readonly class TransformType extends BaseType
 {
     /**
      * @param Type<TValue> $assertion

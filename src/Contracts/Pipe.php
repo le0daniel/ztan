@@ -5,13 +5,12 @@ namespace Le0daniel\Assertions\Contracts;
 use Le0daniel\Assertions\Data\Value;
 
 /**
- * @template-covariant TValue
+ * @template TValue
  */
-interface Type
+interface Pipe
 {
     /**
-     * @phpstan-assert-if-true TValue $value
-     * @param mixed $value
+     * @param TValue $value
      * @param Context $context
      * @return TValue|Value::INVALID
      */

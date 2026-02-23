@@ -2,14 +2,15 @@
 
 namespace Le0daniel\Assertions\Types;
 
-use Le0daniel\Assertions\Contracts\Type;
+use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
+use Le0daniel\Assertions\Contracts\Type;
 
 /**
  * @template TAssertionValue
- * @implements Type<null|TAssertionValue>
+ * @extends BaseType<null|TAssertionValue>
  */
-final readonly class NullableType implements Type
+final readonly class NullableType extends BaseType
 {
     /**
      * @param Type<TAssertionValue> $assertion

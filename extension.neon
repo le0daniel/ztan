@@ -1,5 +1,26 @@
 services:
-	-
-		class: Le0daniel\Assertions\PhpStan\AssertionResolver
-		tags:
-			- phpstan.phpDoc.typeNodeResolverExtension
+    -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\ArrayStructTypeResolver
+
+    -
+        class: Le0daniel\Assertions\PhpStan\ExecuteReturnTypeExtension
+        arguments:
+            resolvers:
+                - @Le0daniel\Assertions\PhpStan\Resolvers\ArrayStructTypeResolver
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\TransformTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Assertions\PhpStan\ClosureParameterTypeExtension
+        tags:
+            - phpstan.staticMethodParameterClosureTypeExtension

@@ -3,98 +3,97 @@
 namespace Le0daniel\Assertions\Types\Scalars;
 
 use Closure;
-use Le0daniel\Assertions\Contracts\Type;
+use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
+use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\NullableType;
+use Le0daniel\Assertions\Types\Constraints\Constraint;
+use Le0daniel\Assertions\Types\Constraints\TransformPipe;
 
 /**
- * @template TValue of string = string
- * @implements Type<TValue>
- *
- * @phpstan-type StringProcessorFn (Closure(string): string)
- * @phpstan-type StringConstraintFn (Closure(string): bool)
+ * @extends BaseType<string>
  */
-final readonly class StringType implements Type
+final readonly class StringType extends BaseType
 {
     /**
-     * @param list<StringProcessorFn> $processors
-     * @param list<StringConstraintFn> $constraints
+     * @param list<Pipe<string>> $pipeline
      */
     public function __construct(
-        private array $processors = [],
-        private array $constraints = [],
+        private array $pipeline = [],
+        private bool $coerce = false
     )
     {
     }
 
-    /**
-     * @return StringType<TValue>
-     */
-    public function trim(): StringType
-    {
-        return clone($this, [
-            'processors' => [
-                ... $this->processors,
-                static fn(string $value) => trim($value),
-            ]
-        ]);
-    }
-
     public function execute(mixed $value, Context $context): string|Value
     {
+        $value = $this->coerce ? match(gettype($value)) {
+            'boolean' => $value ? 'true' : 'false',
+            'integer', 'double', 'string' => (string) $value,
+            default => $value,
+        } : $value;
+
         if (!is_string($value)) {
             $context->addIssue(new Issue("Expected string."));
             return Value::INVALID;
         }
 
-        $value = array_reduce(
-            $this->processors,
-            static fn (string $value, Closure $processor): string => $processor($value),
-            $value
-        );
-
-        if (array_any($this->constraints, static fn($constraint) => !$constraint($value))) {
-            return Value::INVALID;
+        foreach ($this->pipeline as $pipe) {
+            $value = $pipe->execute($value, $context);
+            if (Value::isInvalid($value)) {
+                return $value;
+            }
         }
 
-        /** @var TValue $value */
         return $value;
     }
 
-    /**
-     * @return StringType<TValue&non-empty-string>
-     */
-    public function notEmpty(): StringType
+    public function trim(): StringType
     {
         return clone($this, [
-            ... $this->constraints,
-            static function (string $value): bool {
-                return mb_strlen(trim($value)) > 0;
-            }
+            'pipeline' => [
+                ... $this->pipeline,
+                new TransformPipe(fn (string $value) => trim($value)),
+            ]
         ]);
     }
 
     /**
-     * @return NullableType<TValue>
+     * @return StringType
      */
-    public function nullable(): NullableType
+    public function notEmpty(): StringType
     {
-        return new NullableType($this);
+        return clone($this, [
+            'pipeline' => [
+                ... $this->pipeline,
+                new Constraint(
+                    static function (string $value): bool {
+                        return trim($value) !== '';
+                    },
+                    'String must not be empty.'
+                )
+            ]
+        ]);
     }
 
     /**
      * @param positive-int $length
-     * @return StringType<TValue>
      */
-    public function minLength(int $length): StringType
+    public function minLength(int $length, bool $including = true): StringType
     {
         return clone($this, [
-            ... $this->constraints,
-            static function (string $value) use ($length): bool {
-                return mb_strlen(trim($value)) >= $length;
-            }
+            'pipeline' => [
+                ... $this->pipeline,
+                new Constraint(
+                    static function (string $value) use ($length, $including): bool {
+                        return $including
+                            ? mb_strlen($value) >= $length
+                            : mb_strlen($value) > $length;
+                    },
+                    "String must be at least {$length} characters long."
+                ),
+            ]
         ]);
     }
 }

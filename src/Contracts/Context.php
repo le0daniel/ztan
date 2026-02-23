@@ -7,4 +7,6 @@ use Le0daniel\Assertions\Data\Issue;
 interface Context
 {
     public function addIssue(Issue $issue): void;
+    public function enterPath(string|int $path): void;
+    public function leavePath(): void;
 }

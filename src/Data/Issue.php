@@ -5,7 +5,7 @@ namespace Le0daniel\Assertions\Data;
 final readonly class Issue
 {
     public function __construct(
-        public string $expectedValueType,
+        public string $message,
     )
     {
     }

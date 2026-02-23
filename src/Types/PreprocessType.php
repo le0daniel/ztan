@@ -3,15 +3,16 @@
 namespace Le0daniel\Assertions\Types;
 
 use Closure;
-use Le0daniel\Assertions\Contracts\Type;
+use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
+use Le0daniel\Assertions\Contracts\Type;
 
 /**
  * @template TValue
- * @implements Type<TValue>
+ * @extends BaseType<TValue>
  * @phpstan-type ProcessingFn Closure(mixed): mixed
  */
-final readonly class PreProcessType implements Type
+final readonly class PreprocessType extends BaseType
 {
     /**
      * @param Type<TValue> $assertion

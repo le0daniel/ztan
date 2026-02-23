@@ -8,6 +8,10 @@ final class Debug
     {
         $type = gettype($value);
 
+        if (is_object($value)) {
+            return self::getObjectType($value);
+        }
+
         return match ($type) {
             'boolean' => 'bool',
             'integer' => 'int',
@@ -16,7 +20,6 @@ final class Debug
             'array' => 'array',
             'resource' => 'resource',
             'NULL' => 'NULL',
-            'object' => self::getObjectType($value),
             default => "unknown",
         };
     }
