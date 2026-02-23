@@ -2,8 +2,10 @@
 
 namespace Le0daniel\Assertions\Tests\Unit\Types\Complex;
 
+use Le0daniel\Assertions\Data\ParseSuccess;
 use Le0daniel\Assertions\Data\ValidationContext;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\CatchType;
 use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
 use Le0daniel\Assertions\Types\Complex\RecordType;
 use Le0daniel\Assertions\Types\Scalars\StringType;
@@ -130,5 +132,17 @@ final class RecordTypeTest extends TestCase
 
         self::assertSame(Value::INVALID, $result);
         self::assertCount(1, $context->issues['user1.name'] ?? []);
+    }
+
+    public function testSafeParseIsPartialWhenCatchBarrierReached(): void
+    {
+        $type = new RecordType(new CatchType(new StringType(), null));
+
+        $result = $type->safeParse(['a' => 'valid', 'b' => 123]);
+
+        self::assertInstanceOf(ParseSuccess::class, $result);
+        self::assertTrue($result->isPartial());
+        self::assertSame(['a' => 'valid', 'b' => null], $result->data);
+        self::assertNotEmpty($result->issues);
     }
 }

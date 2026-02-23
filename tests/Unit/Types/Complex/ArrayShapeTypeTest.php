@@ -2,6 +2,7 @@
 
 namespace Le0daniel\Assertions\Tests\Unit\Types\Complex;
 
+use Le0daniel\Assertions\Data\ParseSuccess;
 use Le0daniel\Assertions\Data\ValidationContext;
 use Le0daniel\Assertions\Data\Value;
 use Le0daniel\Assertions\Types\CatchType;
@@ -191,5 +192,33 @@ final class ArrayShapeTypeTest extends TestCase
         self::assertSame(Value::INVALID, $result);
         self::assertCount(1, $context->issues['first'] ?? []);
         self::assertCount(1, $context->issues['second'] ?? []);
+    }
+
+    public function testSafeParseIsPartialWhenCatchBarrierReached(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new CatchType(new StringType(), null),
+        ]);
+
+        $result = $type->safeParse(['name' => 123]);
+
+        self::assertInstanceOf(ParseSuccess::class, $result);
+        self::assertTrue($result->isPartial());
+        self::assertSame(['name' => null], $result->data);
+        self::assertNotEmpty($result->issues);
+    }
+
+    public function testSafeParseIsNotPartialWhenFullyValid(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new CatchType(new StringType(), null),
+        ]);
+
+        $result = $type->safeParse(['name' => 'Alice']);
+
+        self::assertInstanceOf(ParseSuccess::class, $result);
+        self::assertFalse($result->isPartial());
+        self::assertSame(['name' => 'Alice'], $result->data);
+        self::assertSame([], $result->issues);
     }
 }

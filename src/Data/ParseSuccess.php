@@ -9,9 +9,16 @@ final readonly class ParseSuccess
 {
     /**
      * @param TValue $data
+     * @param array<string, list<Issue>> $issues
      */
     public function __construct(
         public mixed $data,
+        public array $issues = [],
     ) {
+    }
+
+    public function isPartial(): bool
+    {
+        return count($this->issues) !== 0;
     }
 }

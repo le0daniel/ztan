@@ -50,7 +50,7 @@ abstract readonly class BaseType implements Type
             return new ParseError($context->issues);
         }
 
-        return new ParseSuccess($result);
+        return new ParseSuccess($result, $context->issues);
     }
 
     /**

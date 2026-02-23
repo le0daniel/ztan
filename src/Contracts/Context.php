@@ -6,7 +6,13 @@ use Le0daniel\Assertions\Data\Issue;
 
 interface Context
 {
+    /** @var array<string, list<Issue>> */
+    public array $issues { get; }
+
     public function addIssue(Issue $issue): void;
     public function enterPath(string|int $path): void;
     public function leavePath(): void;
+
+    public function cloneForProbing(): Context;
+    public function mergeIssues(Context $other): void;
 }

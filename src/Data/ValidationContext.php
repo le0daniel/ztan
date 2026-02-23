@@ -36,4 +36,19 @@ final class ValidationContext implements Context
     {
         return implode('.', $this->path);
     }
+
+    public function cloneForProbing(): Context
+    {
+        return new self(path: $this->path);
+    }
+
+    public function mergeIssues(Context $other): void
+    {
+        foreach ($other->issues as $path => $issues) {
+            $this->issues[$path] = [
+                ...($this->issues[$path] ?? []),
+                ...$issues,
+            ];
+        }
+    }
 }
