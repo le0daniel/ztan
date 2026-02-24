@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\PHPStan\Cases;
+namespace Le0daniel\Ztan\Tests\PHPStan\Cases;
 
-use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
-use Le0daniel\Assertions\Types\Complex\RecordType;
-use Le0daniel\Assertions\Types\Scalars\StringType;
+use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
+use Le0daniel\Ztan\Types\Complex\RecordType;
+use Le0daniel\Ztan\Types\Scalars\StringType;
 use function PHPStan\Testing\assertType;
 
 $rec = new RecordType(new StringType());
@@ -23,5 +23,5 @@ assertType('array<string, string>', $rec->maxProperties(5)->parse('x'));
 assertType('array<string, string>', $rec->minProperties(1)->maxProperties(10)->parse('x'));
 
 // Chained constraints compose with other methods
-assertType('Le0daniel\Assertions\Types\NullableType<array<string, string>>', $rec->nonEmpty()->nullable());
+assertType('Le0daniel\Ztan\Types\NullableType<array<string, string>>', $rec->nonEmpty()->nullable());
 assertType('array<string, string>|null', $rec->nonEmpty()->nullable()->parse('x'));

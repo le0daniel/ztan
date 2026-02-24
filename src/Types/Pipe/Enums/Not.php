@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Pipe\Enums;
+namespace Le0daniel\Ztan\Types\Pipe\Enums;
 
-use Le0daniel\Assertions\Contracts\Context;
-use Le0daniel\Assertions\Contracts\Pipe;
-use Le0daniel\Assertions\Data\Exceptions\InvalidSchemaException;
-use Le0daniel\Assertions\Data\Issue;
-use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Pipe;
+use Le0daniel\Ztan\Data\Exceptions\InvalidSchemaException;
+use Le0daniel\Ztan\Data\Issue;
+use Le0daniel\Ztan\Data\Value;
 use UnitEnum;
 
 /**

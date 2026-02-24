@@ -1,72 +1,72 @@
 services:
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\ArrayStructTypeResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ArrayStructTypeResolver
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\ObjectStructTypeResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ObjectStructTypeResolver
 
     -
-        class: Le0daniel\Assertions\PhpStan\ExecuteReturnTypeExtension
+        class: Le0daniel\Ztan\PhpStan\ExecuteReturnTypeExtension
         arguments:
             resolvers:
-                - @Le0daniel\Assertions\PhpStan\Resolvers\ArrayStructTypeResolver
-                - @Le0daniel\Assertions\PhpStan\Resolvers\ObjectStructTypeResolver
+                - @Le0daniel\Ztan\PhpStan\Resolvers\ArrayStructTypeResolver
+                - @Le0daniel\Ztan\PhpStan\Resolvers\ObjectStructTypeResolver
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\TransformTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\TransformTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\LiteralTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\LiteralTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\UnionTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\UnionTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\TupleTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\TupleTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
+        class: Le0daniel\Ztan\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\CoerceBuilderMethodReturnTypeExtension
+        class: Le0daniel\Ztan\PhpStan\Resolvers\CoerceBuilderMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\Resolvers\ZtanStaticMethodReturnTypeExtension
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ZtanStaticMethodReturnTypeExtension
         arguments:
-            arrayShapeResolver: @Le0daniel\Assertions\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
-            objectShapeResolver: @Le0daniel\Assertions\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
-            unionResolver: @Le0daniel\Assertions\PhpStan\Resolvers\UnionTypeConstructorResolver
-            tupleResolver: @Le0daniel\Assertions\PhpStan\Resolvers\TupleTypeConstructorResolver
-            discriminatedUnionResolver: @Le0daniel\Assertions\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
-            literalResolver: @Le0daniel\Assertions\PhpStan\Resolvers\LiteralTypeConstructorResolver
+            arrayShapeResolver: @Le0daniel\Ztan\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
+            objectShapeResolver: @Le0daniel\Ztan\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
+            unionResolver: @Le0daniel\Ztan\PhpStan\Resolvers\UnionTypeConstructorResolver
+            tupleResolver: @Le0daniel\Ztan\PhpStan\Resolvers\TupleTypeConstructorResolver
+            discriminatedUnionResolver: @Le0daniel\Ztan\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
+            literalResolver: @Le0daniel\Ztan\PhpStan\Resolvers\LiteralTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
-        class: Le0daniel\Assertions\PhpStan\ClosureParameterTypeExtension
+        class: Le0daniel\Ztan\PhpStan\ClosureParameterTypeExtension
         tags:
             - phpstan.staticMethodParameterClosureTypeExtension

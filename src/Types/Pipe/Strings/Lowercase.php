@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Pipe\Strings;
+namespace Le0daniel\Ztan\Types\Pipe\Strings;
 
-use Le0daniel\Assertions\Contracts\Context;
-use Le0daniel\Assertions\Contracts\Pipe;
+use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Pipe;
 
 /**
  * @implements Pipe<string>

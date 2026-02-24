@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Data;
+namespace Le0daniel\Ztan\Data;
 
 enum IssueType: string
 {

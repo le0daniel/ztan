@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan\Resolvers;
+namespace Le0daniel\Ztan\PhpStan\Resolvers;
 
-use Le0daniel\Assertions\Contracts\Type;
-use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
-use Le0daniel\Assertions\Types\Complex\ObjectShapeType;
+use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
+use Le0daniel\Ztan\Types\Complex\ObjectShapeType;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;

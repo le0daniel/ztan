@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Integration\FullSchema\Schemas;
+namespace Le0daniel\Ztan\Tests\Integration\FullSchema\Schemas;
 
-use Le0daniel\Assertions\Contracts\BaseType;
-use Le0daniel\Assertions\Tests\Integration\FullSchema\SchemaTestCase;
-use Le0daniel\Assertions\Ztan;
+use Le0daniel\Ztan\Contracts\BaseType;
+use Le0daniel\Ztan\Tests\Integration\FullSchema\SchemaTestCase;
+use Le0daniel\Ztan\Ztan;
 
 final class DeepSchema implements SchemaTestCase
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\PHPStan;
+namespace Le0daniel\Ztan\Tests\PHPStan;
 
 use PHPStan\Testing\TypeInferenceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Types\Constraints\Strings;
+namespace Le0daniel\Ztan\Tests\Unit\Types\Constraints\Strings;
 
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Types\Pipe\Strings\Trim;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Types\Pipe\Strings\Trim;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

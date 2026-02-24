@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Integration\FullSchema;
+namespace Le0daniel\Ztan\Tests\Integration\FullSchema;
 
-use Le0daniel\Assertions\Contracts\BaseType;
+use Le0daniel\Ztan\Contracts\BaseType;
 
 interface SchemaTestCase
 {

@@ -1,25 +1,25 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Scalars;
+namespace Le0daniel\Ztan\Types\Scalars;
 
-use Le0daniel\Assertions\Contracts\BaseType;
-use Le0daniel\Assertions\Contracts\Context;
-use Le0daniel\Assertions\Contracts\Pipe;
-use Le0daniel\Assertions\Data\Issue;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Pipe\Strings\Email;
-use Le0daniel\Assertions\Types\Pipe\Strings\EndsWith;
-use Le0daniel\Assertions\Types\Pipe\Strings\IsEmpty;
-use Le0daniel\Assertions\Types\Pipe\Strings\Lowercase;
-use Le0daniel\Assertions\Types\Pipe\Strings\MaxLength;
-use Le0daniel\Assertions\Types\Pipe\Strings\MinLength;
-use Le0daniel\Assertions\Types\Pipe\Strings\NotEmpty;
-use Le0daniel\Assertions\Types\Pipe\Strings\Regex;
-use Le0daniel\Assertions\Types\Pipe\Strings\StartsWith;
-use Le0daniel\Assertions\Types\Pipe\Strings\Trim;
-use Le0daniel\Assertions\Types\Pipe\Strings\Uppercase;
-use Le0daniel\Assertions\Types\Pipe\Strings\Url;
-use Le0daniel\Assertions\Types\Pipe\Strings\WebUrl;
+use Le0daniel\Ztan\Contracts\BaseType;
+use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Pipe;
+use Le0daniel\Ztan\Data\Issue;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\Pipe\Strings\Email;
+use Le0daniel\Ztan\Types\Pipe\Strings\EndsWith;
+use Le0daniel\Ztan\Types\Pipe\Strings\IsEmpty;
+use Le0daniel\Ztan\Types\Pipe\Strings\Lowercase;
+use Le0daniel\Ztan\Types\Pipe\Strings\MaxLength;
+use Le0daniel\Ztan\Types\Pipe\Strings\MinLength;
+use Le0daniel\Ztan\Types\Pipe\Strings\NotEmpty;
+use Le0daniel\Ztan\Types\Pipe\Strings\Regex;
+use Le0daniel\Ztan\Types\Pipe\Strings\StartsWith;
+use Le0daniel\Ztan\Types\Pipe\Strings\Trim;
+use Le0daniel\Ztan\Types\Pipe\Strings\Uppercase;
+use Le0daniel\Ztan\Types\Pipe\Strings\Url;
+use Le0daniel\Ztan\Types\Pipe\Strings\WebUrl;
 
 /**
  * @extends BaseType<string>

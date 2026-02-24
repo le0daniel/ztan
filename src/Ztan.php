@@ -1,27 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions;
+namespace Le0daniel\Ztan;
 
-use Le0daniel\Assertions\Contracts\Type;
-use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
-use Le0daniel\Assertions\Types\Complex\DiscriminatedUnionType;
-use Le0daniel\Assertions\Types\Complex\ListType;
-use Le0daniel\Assertions\Types\Complex\ObjectShapeType;
-use Le0daniel\Assertions\Types\Complex\RecordType;
-use Le0daniel\Assertions\Types\Complex\TupleType;
-use Le0daniel\Assertions\Types\Complex\UnionType;
-use Le0daniel\Assertions\Types\Scalars\BoolType;
-use Le0daniel\Assertions\Types\Scalars\DateTimeStringType;
-use Le0daniel\Assertions\Types\Scalars\EnumType;
-use Le0daniel\Assertions\Types\Scalars\FloatType;
-use Le0daniel\Assertions\Types\Scalars\InstanceType;
-use Le0daniel\Assertions\Types\Scalars\IntType;
-use Le0daniel\Assertions\Types\Scalars\LiteralType;
-use Le0daniel\Assertions\Types\Scalars\MixedType;
-use Le0daniel\Assertions\Types\Scalars\NeverType;
-use Le0daniel\Assertions\Types\Scalars\NullType;
-use Le0daniel\Assertions\Types\Scalars\StringType;
-use Le0daniel\Assertions\Contracts\Shape;
+use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
+use Le0daniel\Ztan\Types\Complex\DiscriminatedUnionType;
+use Le0daniel\Ztan\Types\Complex\ListType;
+use Le0daniel\Ztan\Types\Complex\ObjectShapeType;
+use Le0daniel\Ztan\Types\Complex\RecordType;
+use Le0daniel\Ztan\Types\Complex\TupleType;
+use Le0daniel\Ztan\Types\Complex\UnionType;
+use Le0daniel\Ztan\Types\Scalars\BoolType;
+use Le0daniel\Ztan\Types\Scalars\DateTimeStringType;
+use Le0daniel\Ztan\Types\Scalars\EnumType;
+use Le0daniel\Ztan\Types\Scalars\FloatType;
+use Le0daniel\Ztan\Types\Scalars\InstanceType;
+use Le0daniel\Ztan\Types\Scalars\IntType;
+use Le0daniel\Ztan\Types\Scalars\LiteralType;
+use Le0daniel\Ztan\Types\Scalars\MixedType;
+use Le0daniel\Ztan\Types\Scalars\NeverType;
+use Le0daniel\Ztan\Types\Scalars\NullType;
+use Le0daniel\Ztan\Types\Scalars\StringType;
+use Le0daniel\Ztan\Contracts\Shape;
 use UnitEnum;
 
 final class Ztan

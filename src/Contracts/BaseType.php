@@ -1,18 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Contracts;
+namespace Le0daniel\Ztan\Contracts;
 
 use Closure;
-use Le0daniel\Assertions\Data\ParseError;
-use Le0daniel\Assertions\Data\ParseSuccess;
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Data\ValidationException;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\CatchType;
-use Le0daniel\Assertions\Types\NullableType;
-use Le0daniel\Assertions\Types\PreprocessType;
-use Le0daniel\Assertions\Types\RefineType;
-use Le0daniel\Assertions\Types\TransformType;
+use Le0daniel\Ztan\Data\ParseError;
+use Le0daniel\Ztan\Data\ParseSuccess;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Data\ValidationException;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\CatchType;
+use Le0daniel\Ztan\Types\NullableType;
+use Le0daniel\Ztan\Types\PreprocessType;
+use Le0daniel\Ztan\Types\RefineType;
+use Le0daniel\Ztan\Types\TransformType;
 
 /**
  * @template TValue

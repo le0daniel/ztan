@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan;
+namespace Le0daniel\Ztan\PhpStan;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;

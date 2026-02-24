@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Data;
+namespace Le0daniel\Ztan\Tests\Unit\Data;
 
-use Le0daniel\Assertions\Data\Issue;
-use Le0daniel\Assertions\Data\IssueType;
-use Le0daniel\Assertions\Data\ValidationContext;
+use Le0daniel\Ztan\Data\Issue;
+use Le0daniel\Ztan\Data\IssueType;
+use Le0daniel\Ztan\Data\ValidationContext;
 use PHPUnit\Framework\TestCase;
 
 final class ValidationContextTest extends TestCase

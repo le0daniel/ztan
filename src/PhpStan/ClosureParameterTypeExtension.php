@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan;
+namespace Le0daniel\Ztan\PhpStan;
 
-use Le0daniel\Assertions\Contracts\Type;
-use Le0daniel\Assertions\Types\RefineType;
-use Le0daniel\Assertions\Types\TransformType;
+use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Types\RefineType;
+use Le0daniel\Ztan\Types\TransformType;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;

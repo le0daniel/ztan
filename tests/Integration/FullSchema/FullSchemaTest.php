@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Integration\FullSchema;
+namespace Le0daniel\Ztan\Tests\Integration\FullSchema;
 
-use Le0daniel\Assertions\Data\ParseError;
-use Le0daniel\Assertions\Data\ParseSuccess;
-use Le0daniel\Assertions\Tests\Integration\FullSchema\Schemas\DeepSchema;
+use Le0daniel\Ztan\Data\ParseError;
+use Le0daniel\Ztan\Data\ParseSuccess;
+use Le0daniel\Ztan\Tests\Integration\FullSchema\Schemas\DeepSchema;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

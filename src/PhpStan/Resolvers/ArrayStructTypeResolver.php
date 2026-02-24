@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan\Resolvers;
+namespace Le0daniel\Ztan\PhpStan\Resolvers;
 
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\PhpStan\TypeResolver;
-use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\PhpStan\TypeResolver;
+use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Enum\EnumCaseObjectType;

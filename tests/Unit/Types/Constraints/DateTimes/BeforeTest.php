@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Types\Constraints\DateTimes;
+namespace Le0daniel\Ztan\Tests\Unit\Types\Constraints\DateTimes;
 
 use DateTimeImmutable;
-use Le0daniel\Assertions\Data\IssueType;
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Pipe\DateTimes\Before;
+use Le0daniel\Ztan\Data\IssueType;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\Pipe\DateTimes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

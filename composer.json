@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Le0daniel\\Assertions\\": "src/"
+            "Le0daniel\\Ztan\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Le0daniel\\Assertions\\Tests\\": "tests/"
+            "Le0daniel\\Ztan\\Tests\\": "tests/"
         }
     },
     "authors": [

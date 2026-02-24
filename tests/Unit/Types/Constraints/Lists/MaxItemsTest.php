@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Types\Constraints\Lists;
+namespace Le0daniel\Ztan\Tests\Unit\Types\Constraints\Lists;
 
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Pipe\Lists\MaxItems;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\Pipe\Lists\MaxItems;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Data;
+namespace Le0daniel\Ztan\Data;
 
-use Le0daniel\Assertions\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Context;
 
 final class ValidationContext implements Context
 {

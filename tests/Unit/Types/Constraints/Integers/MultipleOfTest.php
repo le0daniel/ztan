@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Types\Constraints\Integers;
+namespace Le0daniel\Ztan\Tests\Unit\Types\Constraints\Integers;
 
-use Le0daniel\Assertions\Data\IssueType;
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Pipe\Integers\MultipleOf;
+use Le0daniel\Ztan\Data\IssueType;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\Pipe\Integers\MultipleOf;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

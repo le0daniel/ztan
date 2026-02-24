@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Scalars;
+namespace Le0daniel\Ztan\Types\Scalars;
 
-use Le0daniel\Assertions\Contracts\Context;
-use Le0daniel\Assertions\Contracts\Type;
+use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Type;
 
 /**
  * @implements Type<mixed>

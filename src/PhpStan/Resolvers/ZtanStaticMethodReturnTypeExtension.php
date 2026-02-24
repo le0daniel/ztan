@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan\Resolvers;
+namespace Le0daniel\Ztan\PhpStan\Resolvers;
 
-use Le0daniel\Assertions\Ztan;
+use Le0daniel\Ztan\Ztan;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;

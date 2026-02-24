@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan\Resolvers;
+namespace Le0daniel\Ztan\PhpStan\Resolvers;
 
-use Le0daniel\Assertions\Contracts\Type;
-use Le0daniel\Assertions\Types\TransformType;
+use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Types\TransformType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Return_;

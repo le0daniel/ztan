@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\PHPStan\Cases;
+namespace Le0daniel\Ztan\Tests\PHPStan\Cases;
 
-use Le0daniel\Assertions\Ztan;
+use Le0daniel\Ztan\Ztan;
 use function PHPStan\Testing\assertType;
 
 $schema = Ztan::arrayShape([

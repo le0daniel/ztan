@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\PhpStan\Resolvers;
+namespace Le0daniel\Ztan\PhpStan\Resolvers;
 
-use Le0daniel\Assertions\CoerceBuilder;
-use Le0daniel\Assertions\Types\Scalars\LiteralType;
+use Le0daniel\Ztan\CoerceBuilder;
+use Le0daniel\Ztan\Types\Scalars\LiteralType;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Types\Scalars;
+namespace Le0daniel\Ztan\Tests\Unit\Types\Scalars;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Le0daniel\Assertions\Data\IssueType;
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Scalars\InstanceType;
+use Le0daniel\Ztan\Data\IssueType;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\Scalars\InstanceType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;

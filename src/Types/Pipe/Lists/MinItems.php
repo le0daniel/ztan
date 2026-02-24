@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Pipe\Lists;
+namespace Le0daniel\Ztan\Types\Pipe\Lists;
 
-use Le0daniel\Assertions\Contracts\Context;
-use Le0daniel\Assertions\Contracts\Pipe;
-use Le0daniel\Assertions\Data\Issue;
-use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Pipe;
+use Le0daniel\Ztan\Data\Issue;
+use Le0daniel\Ztan\Data\Value;
 
 /**
  * @implements Pipe<list<mixed>>

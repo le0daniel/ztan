@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Complex;
+namespace Le0daniel\Ztan\Types\Complex;
 
-use Le0daniel\Assertions\Contracts\BaseType;
-use Le0daniel\Assertions\Contracts\Context;
-use Le0daniel\Assertions\Contracts\Shape;
-use Le0daniel\Assertions\Contracts\Type;
-use Le0daniel\Assertions\Data\Issue;
-use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Ztan\Contracts\BaseType;
+use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\Shape;
+use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Data\Issue;
+use Le0daniel\Ztan\Data\Value;
 
 /**
  * @template TProperties

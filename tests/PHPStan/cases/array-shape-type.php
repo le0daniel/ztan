@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\PHPStan\Cases;
+namespace Le0daniel\Ztan\Tests\PHPStan\Cases;
 
-use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
-use Le0daniel\Assertions\Types\Complex\RecordType;
-use Le0daniel\Assertions\Types\Scalars\StringType;
+use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
+use Le0daniel\Ztan\Types\Complex\RecordType;
+use Le0daniel\Ztan\Types\Scalars\StringType;
 use function PHPStan\Testing\assertType;
 
 $shape = new ArrayShapeType(['name' => new StringType()]);

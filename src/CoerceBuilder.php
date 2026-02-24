@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions;
+namespace Le0daniel\Ztan;
 
-use Le0daniel\Assertions\Types\Scalars\BoolType;
-use Le0daniel\Assertions\Types\Scalars\EnumType;
-use Le0daniel\Assertions\Types\Scalars\FloatType;
-use Le0daniel\Assertions\Types\Scalars\IntType;
-use Le0daniel\Assertions\Types\Scalars\LiteralType;
-use Le0daniel\Assertions\Types\Scalars\StringType;
+use Le0daniel\Ztan\Types\Scalars\BoolType;
+use Le0daniel\Ztan\Types\Scalars\EnumType;
+use Le0daniel\Ztan\Types\Scalars\FloatType;
+use Le0daniel\Ztan\Types\Scalars\IntType;
+use Le0daniel\Ztan\Types\Scalars\LiteralType;
+use Le0daniel\Ztan\Types\Scalars\StringType;
 use UnitEnum;
 
 final readonly class CoerceBuilder

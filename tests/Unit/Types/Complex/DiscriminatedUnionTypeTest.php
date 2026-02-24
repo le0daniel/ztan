@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Tests\Unit\Types\Complex;
+namespace Le0daniel\Ztan\Tests\Unit\Types\Complex;
 
-use Le0daniel\Assertions\Data\ParseError;
-use Le0daniel\Assertions\Data\ParseSuccess;
-use Le0daniel\Assertions\Data\ValidationContext;
-use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
-use Le0daniel\Assertions\Types\Complex\DiscriminatedUnionType;
-use Le0daniel\Assertions\Types\Scalars\IntType;
-use Le0daniel\Assertions\Types\Scalars\LiteralType;
-use Le0daniel\Assertions\Types\Scalars\StringType;
+use Le0daniel\Ztan\Data\ParseError;
+use Le0daniel\Ztan\Data\ParseSuccess;
+use Le0daniel\Ztan\Data\ValidationContext;
+use Le0daniel\Ztan\Data\Value;
+use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
+use Le0daniel\Ztan\Types\Complex\DiscriminatedUnionType;
+use Le0daniel\Ztan\Types\Scalars\IntType;
+use Le0daniel\Ztan\Types\Scalars\LiteralType;
+use Le0daniel\Ztan\Types\Scalars\StringType;
 use PHPUnit\Framework\TestCase;
 
 final class DiscriminatedUnionTypeTest extends TestCase
