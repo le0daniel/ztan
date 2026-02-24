@@ -25,17 +25,9 @@ final readonly class ListType extends BaseType
 
     public function execute(mixed $value, Context $context): array|Value
     {
-        if (!is_array($value)) {
+        if (!is_iterable($value)) {
             $context->addIssue(Issue::invalidType(
-                "Expected a list.",
-                $value,
-            ));
-            return Value::INVALID;
-        }
-
-        if (!array_is_list($value)) {
-            $context->addIssue(Issue::invalidType(
-                "Expected a list, got a non-sequential array.",
+                "Expected an iterable list.",
                 $value,
             ));
             return Value::INVALID;
@@ -43,18 +35,27 @@ final readonly class ListType extends BaseType
 
         $hasIssues = false;
         $validated = [];
+        $expectedIndex = 0;
         foreach ($value as $index => $item) {
+            if ($index !== $expectedIndex) {
+                $context->addIssue(Issue::invalidType(
+                    "Expected a list, got non-sequential keys.",
+                    $value,
+                ));
+                return Value::INVALID;
+            }
+
             $context->enterPath($index);
             try {
                 $validatedValue = $this->type->execute($item, $context);
                 if (Value::isInvalid($validatedValue)) {
                     $hasIssues = true;
-                    continue;
+                } else {
+                    $validated[] = $validatedValue;
                 }
-
-                $validated[] = $validatedValue;
             } finally {
                 $context->leavePath();
+                $expectedIndex++;
             }
         }
 

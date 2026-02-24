@@ -26,9 +26,9 @@ final readonly class RecordType extends BaseType
 
     public function execute(mixed $value, Context $context): array|Value
     {
-        if (!is_array($value)) {
+        if (!is_iterable($value)) {
             $context->addIssue(Issue::invalidType(
-                "Expected array.",
+                "Expected an iterable record.",
                 $value,
             ));
             return Value::INVALID;
