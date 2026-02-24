@@ -8,7 +8,6 @@ use Le0daniel\Assertions\Types\Complex\ObjectShapeType;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -16,11 +15,11 @@ use PHPStan\Type\ObjectShapeType as PhpStanObjectShapeType;
 use PHPStan\Type\Type as PhpStanType;
 use PHPStan\Type\TypeCombinator;
 
-final readonly class ArrayShapeTypeConstructorResolver implements DynamicStaticMethodReturnTypeExtension
+final readonly class ObjectShapeTypeConstructorResolver implements DynamicStaticMethodReturnTypeExtension
 {
     public function getClass(): string
     {
-        return ArrayShapeType::class;
+        return ObjectShapeType::class;
     }
 
     public function isStaticMethodSupported(MethodReflection $methodReflection): bool
@@ -39,25 +38,26 @@ final readonly class ArrayShapeTypeConstructorResolver implements DynamicStaticM
         }
 
         $propertiesType = $scope->getType($args[0]->value);
-        $resolvedShape = $this->resolvePropertiesArray($propertiesType);
+        $resolvedShape = $this->resolvePropertiesObject($propertiesType);
         if ($resolvedShape === null) {
             return null;
         }
 
-        return new GenericObjectType(ArrayShapeType::class, [$resolvedShape]);
+        return new GenericObjectType(ObjectShapeType::class, [$resolvedShape]);
     }
 
-    private function resolvePropertiesArray(PhpStanType $propertiesType): ?PhpStanType
+    private function resolvePropertiesObject(PhpStanType $propertiesType): ?PhpStanType
     {
         $constantArrays = $propertiesType->getConstantArrays();
         if ($constantArrays === []) {
             return null;
         }
 
-        $resolvedArrays = [];
+        $resolvedShapes = [];
 
         foreach ($constantArrays as $constantArray) {
-            $builder = ConstantArrayTypeBuilder::createEmpty();
+            $properties = [];
+            $optionalProperties = [];
             $keyTypes = $constantArray->getKeyTypes();
             $valueTypes = $constantArray->getValueTypes();
 
@@ -74,30 +74,29 @@ final readonly class ArrayShapeTypeConstructorResolver implements DynamicStaticM
                 $valueType = $valueTypes[$index];
                 $resolvedValueType = $this->resolveValueOutputType($valueType);
 
-                $builder->setOffsetValueType(
-                    new ConstantStringType($cleanKey),
-                    $resolvedValueType,
-                    $isOptional,
-                );
+                $properties[$cleanKey] = $resolvedValueType;
+                if ($isOptional) {
+                    $optionalProperties[] = $cleanKey;
+                }
             }
 
-            $resolvedArrays[] = $builder->getArray();
+            $resolvedShapes[] = new PhpStanObjectShapeType($properties, $optionalProperties);
         }
 
-        return TypeCombinator::union(...$resolvedArrays);
+        return TypeCombinator::union(...$resolvedShapes);
     }
 
     private function resolveValueOutputType(PhpStanType $valueType): PhpStanType
     {
-        if (in_array(ArrayShapeType::class, $valueType->getObjectClassNames(), true)) {
-            $nested = $this->resolvePropertiesFromGeneric($valueType);
+        if (in_array(ObjectShapeType::class, $valueType->getObjectClassNames(), true)) {
+            $nested = $this->resolvePropertiesFromObjectShapeGeneric($valueType);
             if ($nested !== null) {
                 return $nested;
             }
         }
 
-        if (in_array(ObjectShapeType::class, $valueType->getObjectClassNames(), true)) {
-            $nested = $this->resolvePropertiesFromObjectShapeGeneric($valueType);
+        if (in_array(ArrayShapeType::class, $valueType->getObjectClassNames(), true)) {
+            $nested = $this->resolvePropertiesFromArrayShapeGeneric($valueType);
             if ($nested !== null) {
                 return $nested;
             }
@@ -116,7 +115,7 @@ final readonly class ArrayShapeTypeConstructorResolver implements DynamicStaticM
         return $propertiesType;
     }
 
-    private function resolvePropertiesFromGeneric(PhpStanType $callerType): ?PhpStanType
+    private function resolvePropertiesFromArrayShapeGeneric(PhpStanType $callerType): ?PhpStanType
     {
         $propertiesType = $callerType->getTemplateType(ArrayShapeType::class, 'TProperties');
         if ($propertiesType->getConstantArrays() === []) {

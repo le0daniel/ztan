@@ -3,15 +3,24 @@ services:
         class: Le0daniel\Assertions\PhpStan\Resolvers\ArrayStructTypeResolver
 
     -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\ObjectStructTypeResolver
+
+    -
         class: Le0daniel\Assertions\PhpStan\ExecuteReturnTypeExtension
         arguments:
             resolvers:
                 - @Le0daniel\Assertions\PhpStan\Resolvers\ArrayStructTypeResolver
+                - @Le0daniel\Assertions\PhpStan\Resolvers\ObjectStructTypeResolver
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
         class: Le0daniel\Assertions\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
