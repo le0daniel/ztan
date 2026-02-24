@@ -36,6 +36,11 @@ services:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
         class: Le0daniel\Assertions\PhpStan\ClosureParameterTypeExtension
         tags:
             - phpstan.staticMethodParameterClosureTypeExtension

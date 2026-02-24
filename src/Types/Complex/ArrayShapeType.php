@@ -4,15 +4,17 @@ namespace Le0daniel\Assertions\Types\Complex;
 
 use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
+use Le0daniel\Assertions\Contracts\Shape;
 use Le0daniel\Assertions\Contracts\Type;
 use Le0daniel\Assertions\Data\Issue;
+use Le0daniel\Assertions\Data\ValidationContext;
 use Le0daniel\Assertions\Data\Value;
 
 /**
  * @template TProperties of array
  * @extends BaseType<TProperties>
  */
-final readonly class ArrayShapeType extends BaseType
+final readonly class ArrayShapeType extends BaseType implements Shape
 {
     /**
      * Expects a key-value array where the key is the property name and the value is the property type.
@@ -88,5 +90,30 @@ final readonly class ArrayShapeType extends BaseType
 
         /** @var TProperties $validatedValue */
         return $validatedValue;
+    }
+
+    /** @return Type<mixed>|null */
+    private function findPropertyType(string $name): ?Type
+    {
+        /** @var Type<mixed>|null */
+        return $this->properties[$name] ?? $this->properties[$name . '?'] ?? null;
+    }
+
+    public function executeProperty(string $propertyName, mixed $value, Context $context): mixed
+    {
+        if (!is_array($value)) {
+            return Value::INVALID;
+        }
+
+        $type = $this->findPropertyType($propertyName);
+        if ($type === null) {
+            return Value::INVALID;
+        }
+
+        if (!array_key_exists($propertyName, $value)) {
+            return Value::INVALID;
+        }
+
+        return $type->execute($value[$propertyName], $context);
     }
 }

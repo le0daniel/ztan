@@ -226,4 +226,70 @@ final class ArrayShapeTypeTest extends TestCase
         self::assertSame(['name' => 'Alice'], $result->data);
         self::assertSame([], $result->issues);
     }
+
+    public function testExecutePropertyReturnsValidatedValue(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new StringType(),
+        ]);
+
+        $result = $type->executeProperty('name', ['name' => 'Alice'], new ValidationContext());
+
+        self::assertSame('Alice', $result);
+    }
+
+    public function testExecutePropertyReturnsInvalidForWrongValueType(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new StringType(),
+        ]);
+
+        $result = $type->executeProperty('name', ['name' => 123], new ValidationContext());
+
+        self::assertSame(Value::INVALID, $result);
+    }
+
+    public function testExecutePropertyReturnsInvalidForMissingProperty(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new StringType(),
+        ]);
+
+        $result = $type->executeProperty('name', ['age' => 30], new ValidationContext());
+
+        self::assertSame(Value::INVALID, $result);
+    }
+
+    public function testExecutePropertyReturnsInvalidForNonArray(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new StringType(),
+        ]);
+
+        $result = $type->executeProperty('name', 'not-an-array', new ValidationContext());
+
+        self::assertSame(Value::INVALID, $result);
+    }
+
+    public function testExecutePropertyReturnsInvalidForUnknownProperty(): void
+    {
+        $type = new ArrayShapeType([
+            'name' => new StringType(),
+        ]);
+
+        $result = $type->executeProperty('age', ['age' => 30], new ValidationContext());
+
+        self::assertSame(Value::INVALID, $result);
+    }
+
+    public function testExecutePropertyWorksWithOptionalSuffix(): void
+    {
+        $type = new ArrayShapeType([
+            'age?' => new StringType(),
+        ]);
+
+        $result = $type->executeProperty('age', ['age' => 'thirty'], new ValidationContext());
+
+        self::assertSame('thirty', $result);
+    }
 }
