@@ -7,6 +7,7 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\Pipe\Strings\Email;
 use Le0daniel\Assertions\Types\Pipe\Strings\EndsWith;
 use Le0daniel\Assertions\Types\Pipe\Strings\IsEmpty;
 use Le0daniel\Assertions\Types\Pipe\Strings\Lowercase;
@@ -17,6 +18,8 @@ use Le0daniel\Assertions\Types\Pipe\Strings\Regex;
 use Le0daniel\Assertions\Types\Pipe\Strings\StartsWith;
 use Le0daniel\Assertions\Types\Pipe\Strings\Trim;
 use Le0daniel\Assertions\Types\Pipe\Strings\Uppercase;
+use Le0daniel\Assertions\Types\Pipe\Strings\Url;
+use Le0daniel\Assertions\Types\Pipe\Strings\WebUrl;
 
 /**
  * @extends BaseType<string>
@@ -89,6 +92,21 @@ final readonly class StringType extends BaseType
     public function notEmpty(): self
     {
         return $this->withPipe(new NotEmpty());
+    }
+
+    public function email(): self
+    {
+        return $this->withPipe(new Email());
+    }
+
+    public function url(?string $protocol = null, ?string $hostname = null, bool $normalize = false): self
+    {
+        return $this->withPipe(new Url($protocol, $hostname, $normalize));
+    }
+
+    public function webUrl(): self
+    {
+        return $this->withPipe(new WebUrl());
     }
 
     public static function coerceValue(mixed $value): mixed
