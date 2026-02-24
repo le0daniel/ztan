@@ -10,6 +10,7 @@ use Le0daniel\Assertions\Data\Value;
 use Le0daniel\Assertions\Types\CatchType;
 use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
 use Le0daniel\Assertions\Types\Complex\RecordType;
+use Le0daniel\Assertions\Types\Scalars\IntType;
 use Le0daniel\Assertions\Types\Scalars\StringType;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -245,5 +246,91 @@ final class RecordTypeTest extends TestCase
         self::assertSame(Value::INVALID, $result);
         self::assertCount(1, $context->issues);
         self::assertSame('Expected an iterable record.', $context->issues[0]->message);
+    }
+
+    public function testNonEmptyRejectsEmptyRecord(): void
+    {
+        $type = (new RecordType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute([], $context);
+
+        self::assertSame(Value::INVALID, $result);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Too few properties.', $context->issues[0]->message);
+    }
+
+    public function testNonEmptyAcceptsSingleProperty(): void
+    {
+        $type = (new RecordType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute(['a' => 'b'], $context);
+
+        self::assertSame(['a' => 'b'], $result);
+        self::assertSame([], $context->issues);
+    }
+
+    public function testMinPropertiesBoundary(): void
+    {
+        $type = (new RecordType(new StringType()))->minProperties(2);
+        $context = new ValidationContext();
+
+        // 1 property should fail
+        $result = $type->execute(['a' => 'one'], $context);
+        self::assertSame(Value::INVALID, $result);
+
+        // 2 properties should pass
+        $context2 = new ValidationContext();
+        $result2 = $type->execute(['a' => 'one', 'b' => 'two'], $context2);
+        self::assertSame(['a' => 'one', 'b' => 'two'], $result2);
+    }
+
+    public function testMaxPropertiesBoundary(): void
+    {
+        $type = (new RecordType(new StringType()))->maxProperties(3);
+        $context = new ValidationContext();
+
+        // 4 properties should fail
+        $result = $type->execute(['a' => '1', 'b' => '2', 'c' => '3', 'd' => '4'], $context);
+        self::assertSame(Value::INVALID, $result);
+
+        // 3 properties should pass
+        $context2 = new ValidationContext();
+        $result2 = $type->execute(['a' => '1', 'b' => '2', 'c' => '3'], $context2);
+        self::assertSame(['a' => '1', 'b' => '2', 'c' => '3'], $result2);
+    }
+
+    public function testConstraintsComposeWithValueValidation(): void
+    {
+        $type = (new RecordType(new IntType()))->minProperties(1);
+        $context = new ValidationContext();
+
+        // Invalid values should fail before constraints
+        $result = $type->execute(['a' => 'not-an-int'], $context);
+        self::assertSame(Value::INVALID, $result);
+    }
+
+    public function testConstraintsWorkWithIterables(): void
+    {
+        $type = (new RecordType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute(new ArrayIterator(['a' => 'one']), $context);
+
+        self::assertSame(['a' => 'one'], $result);
+        self::assertSame([], $context->issues);
+    }
+
+    public function testConstraintsRejectEmptyIterables(): void
+    {
+        $type = (new RecordType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute(new ArrayIterator([]), $context);
+
+        self::assertSame(Value::INVALID, $result);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Too few properties.', $context->issues[0]->message);
     }
 }

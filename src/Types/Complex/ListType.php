@@ -7,6 +7,8 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Type;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\Pipe\Lists\MaxItems;
+use Le0daniel\Assertions\Types\Pipe\Lists\MinItems;
 
 /**
  * @template TValue
@@ -16,11 +18,37 @@ final readonly class ListType extends BaseType
 {
     /**
      * @param Type<TValue> $type
+     * @param list<MinItems|MaxItems> $pipeline
      */
     public function __construct(
-        private Type $type
+        private Type $type,
+        private array $pipeline = [],
     )
     {
+    }
+
+    /** @return self<TValue> */
+    public function minItems(int $count, bool $including = true): self
+    {
+        return new self($this->type, [...$this->pipeline, new MinItems($count, $including)]);
+    }
+
+    /** @return self<TValue> */
+    public function maxItems(int $count, bool $including = true): self
+    {
+        return new self($this->type, [...$this->pipeline, new MaxItems($count, $including)]);
+    }
+
+    /** @return self<TValue> */
+    public function nonEmpty(): self
+    {
+        return new self($this->type, [...$this->pipeline, new MinItems(1)]);
+    }
+
+    /** @return self<TValue> */
+    public function length(int $count): self
+    {
+        return new self($this->type, [...$this->pipeline, new MinItems($count), new MaxItems($count)]);
     }
 
     public function execute(mixed $value, Context $context): array|Value
@@ -61,6 +89,13 @@ final readonly class ListType extends BaseType
 
         if ($hasIssues) {
             return Value::INVALID;
+        }
+
+        foreach ($this->pipeline as $pipe) {
+            $validated = $pipe->execute($validated, $context);
+            if (Value::isInvalid($validated)) {
+                return $validated;
+            }
         }
 
         return $validated;

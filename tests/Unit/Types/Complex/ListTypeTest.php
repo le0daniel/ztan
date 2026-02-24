@@ -11,6 +11,7 @@ use Le0daniel\Assertions\Data\Value;
 use Le0daniel\Assertions\Types\CatchType;
 use Le0daniel\Assertions\Types\Complex\ArrayShapeType;
 use Le0daniel\Assertions\Types\Complex\ListType;
+use Le0daniel\Assertions\Types\Scalars\IntType;
 use Le0daniel\Assertions\Types\Scalars\StringType;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -262,5 +263,130 @@ final class ListTypeTest extends TestCase
         self::assertSame(Value::INVALID, $result);
         self::assertCount(1, $context->issues);
         self::assertSame('Expected an iterable list.', $context->issues[0]->message);
+    }
+
+    public function testNonEmptyRejectsEmptyList(): void
+    {
+        $type = (new ListType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute([], $context);
+
+        self::assertSame(Value::INVALID, $result);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Too few items.', $context->issues[0]->message);
+    }
+
+    public function testNonEmptyAcceptsSingleItem(): void
+    {
+        $type = (new ListType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute(['a'], $context);
+
+        self::assertSame(['a'], $result);
+        self::assertSame([], $context->issues);
+    }
+
+    public function testMinItemsBoundary(): void
+    {
+        $type = (new ListType(new StringType()))->minItems(2);
+        $context = new ValidationContext();
+
+        // 1 item should fail
+        $result = $type->execute(['a'], $context);
+        self::assertSame(Value::INVALID, $result);
+
+        // 2 items should pass
+        $context2 = new ValidationContext();
+        $result2 = $type->execute(['a', 'b'], $context2);
+        self::assertSame(['a', 'b'], $result2);
+    }
+
+    public function testMaxItemsBoundary(): void
+    {
+        $type = (new ListType(new StringType()))->maxItems(3);
+        $context = new ValidationContext();
+
+        // 4 items should fail
+        $result = $type->execute(['a', 'b', 'c', 'd'], $context);
+        self::assertSame(Value::INVALID, $result);
+
+        // 3 items should pass
+        $context2 = new ValidationContext();
+        $result2 = $type->execute(['a', 'b', 'c'], $context2);
+        self::assertSame(['a', 'b', 'c'], $result2);
+    }
+
+    public function testLengthAcceptsExactCount(): void
+    {
+        $type = (new ListType(new StringType()))->length(3);
+        $context = new ValidationContext();
+
+        $result = $type->execute(['a', 'b', 'c'], $context);
+
+        self::assertSame(['a', 'b', 'c'], $result);
+        self::assertSame([], $context->issues);
+    }
+
+    public function testLengthRejectsDifferentCounts(): void
+    {
+        $type = (new ListType(new StringType()))->length(3);
+
+        $context1 = new ValidationContext();
+        self::assertSame(Value::INVALID, $type->execute(['a', 'b'], $context1));
+
+        $context2 = new ValidationContext();
+        self::assertSame(Value::INVALID, $type->execute(['a', 'b', 'c', 'd'], $context2));
+    }
+
+    public function testConstraintsComposeWithElementValidation(): void
+    {
+        $type = (new ListType(new IntType()))->minItems(1);
+        $context = new ValidationContext();
+
+        // Invalid elements should fail before constraints
+        $result = $type->execute(['not-an-int'], $context);
+        self::assertSame(Value::INVALID, $result);
+    }
+
+    public function testConstraintsWorkWithIterables(): void
+    {
+        $type = (new ListType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute(new ArrayIterator(['a', 'b']), $context);
+
+        self::assertSame(['a', 'b'], $result);
+        self::assertSame([], $context->issues);
+    }
+
+    public function testConstraintsRejectEmptyIterables(): void
+    {
+        $type = (new ListType(new StringType()))->nonEmpty();
+        $context = new ValidationContext();
+
+        $result = $type->execute(new ArrayIterator([]), $context);
+
+        self::assertSame(Value::INVALID, $result);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Too few items.', $context->issues[0]->message);
+    }
+
+    public function testConstraintsWorkWithGenerators(): void
+    {
+        $type = (new ListType(new StringType()))->minItems(2);
+        $context = new ValidationContext();
+
+        $generator = (function () {
+            yield 'x';
+            yield 'y';
+            yield 'z';
+        })();
+
+        $result = $type->execute($generator, $context);
+
+        self::assertSame(['x', 'y', 'z'], $result);
+        self::assertSame([], $context->issues);
     }
 }

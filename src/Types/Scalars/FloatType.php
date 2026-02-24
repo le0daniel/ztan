@@ -86,7 +86,7 @@ final readonly class FloatType extends BaseType
             is_float($value) => $value,
             is_int($value) => (float) $value,
             is_bool($value) => $value ? 1.0 : 0.0,
-            is_string($value) && is_numeric($value) => (float) $value,
+            is_string($value) && (filter_var($value, FILTER_VALIDATE_INT) !== false || filter_var($value, FILTER_VALIDATE_FLOAT) !== false) => (float) $value,
             default => $value,
         };
     }

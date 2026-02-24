@@ -7,6 +7,8 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Type;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\Pipe\Records\MaxRecords;
+use Le0daniel\Assertions\Types\Pipe\Records\MinRecords;
 
 /**
  * @template TValueType
@@ -16,13 +18,32 @@ final readonly class RecordType extends BaseType
 {
     /**
      * @param Type<TValueType> $valueType
+     * @param list<MinRecords|MaxRecords> $pipeline
      */
     public function __construct(
-        private Type $valueType
+        private Type $valueType,
+        private array $pipeline = [],
     )
     {
     }
 
+    /** @return self<TValueType> */
+    public function minProperties(int $count, bool $including = true): self
+    {
+        return new self($this->valueType, [...$this->pipeline, new MinRecords($count, $including)]);
+    }
+
+    /** @return self<TValueType> */
+    public function maxProperties(int $count, bool $including = true): self
+    {
+        return new self($this->valueType, [...$this->pipeline, new MaxRecords($count, $including)]);
+    }
+
+    /** @return self<TValueType> */
+    public function nonEmpty(): self
+    {
+        return new self($this->valueType, [...$this->pipeline, new MinRecords(1)]);
+    }
 
     public function execute(mixed $value, Context $context): array|Value
     {
@@ -62,6 +83,13 @@ final readonly class RecordType extends BaseType
 
         if ($hasIssues) {
             return Value::INVALID;
+        }
+
+        foreach ($this->pipeline as $pipe) {
+            $validated = $pipe->execute($validated, $context);
+            if (Value::isInvalid($validated)) {
+                return $validated;
+            }
         }
 
         return $validated;

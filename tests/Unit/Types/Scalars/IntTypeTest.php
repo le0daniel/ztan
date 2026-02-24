@@ -73,7 +73,7 @@ final class IntTypeTest extends TestCase
         yield 'false coerced' => [false, 0];
         yield 'numeric string' => ['42', 42];
         yield 'negative numeric string' => ['-7', -7];
-        yield 'float string' => ['3.14', 3];
+        yield 'zero string' => ['0', 0];
     }
 
     #[DataProvider('coerceProvider')]
@@ -98,6 +98,8 @@ final class IntTypeTest extends TestCase
         yield 'object' => [new \stdClass()];
         yield 'non-numeric string' => ['hello'];
         yield 'empty string' => [''];
+        yield 'float string' => ['3.14'];
+        yield 'scientific notation' => ['1e5'];
     }
 
     #[DataProvider('coerceStillRejectsProvider')]

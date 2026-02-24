@@ -28,3 +28,14 @@ assertType('Le0daniel\Assertions\Types\RefineType<list<string>>', $list->refine(
 assertType('list<string>', $list->refine(fn(array $v) => $v !== [], 'msg')->parse('x'));
 
 assertType('Le0daniel\Assertions\Types\PreprocessType<list<string>>', $list->preprocess(fn($v) => $v));
+
+// Constraint methods preserve type
+assertType('list<string>', $list->nonEmpty()->parse('x'));
+assertType('list<string>', $list->minItems(2)->parse('x'));
+assertType('list<string>', $list->maxItems(5)->parse('x'));
+assertType('list<string>', $list->length(3)->parse('x'));
+assertType('list<string>', $list->minItems(1)->maxItems(10)->parse('x'));
+
+// Chained constraints compose with other methods
+assertType('Le0daniel\Assertions\Types\NullableType<list<string>>', $list->nonEmpty()->nullable());
+assertType('list<string>|null', $list->nonEmpty()->nullable()->parse('x'));

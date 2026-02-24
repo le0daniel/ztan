@@ -92,7 +92,7 @@ final readonly class IntType extends BaseType
             is_int($value) => $value,
             is_float($value) => (int) $value,
             is_bool($value) => $value ? 1 : 0,
-            is_string($value) && is_numeric($value) => (int) $value,
+            is_string($value) && filter_var($value, FILTER_VALIDATE_INT) !== false => (int) $value,
             default => $value,
         };
     }

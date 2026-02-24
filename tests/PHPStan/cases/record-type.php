@@ -15,3 +15,13 @@ assertType('array<string, array<string, string>>', $nested->parse('x'));
 
 $recOfShape = new RecordType(new ArrayShapeType(['id' => new StringType()]));
 assertType('array<string, array{id: string}>', $recOfShape->parse('x'));
+
+// Constraint methods preserve type
+assertType('array<string, string>', $rec->nonEmpty()->parse('x'));
+assertType('array<string, string>', $rec->minProperties(2)->parse('x'));
+assertType('array<string, string>', $rec->maxProperties(5)->parse('x'));
+assertType('array<string, string>', $rec->minProperties(1)->maxProperties(10)->parse('x'));
+
+// Chained constraints compose with other methods
+assertType('Le0daniel\Assertions\Types\NullableType<array<string, string>>', $rec->nonEmpty()->nullable());
+assertType('array<string, string>|null', $rec->nonEmpty()->nullable()->parse('x'));
