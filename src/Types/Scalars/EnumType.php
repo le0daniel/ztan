@@ -8,6 +8,8 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\Pipe\Enums\Not;
+use Le0daniel\Assertions\Types\Pipe\Enums\Only;
 use TypeError;
 use UnitEnum;
 
@@ -27,6 +29,33 @@ final readonly class EnumType extends BaseType
         private bool $coerce = false,
     )
     {
+    }
+
+    /**
+     * @param Pipe<T> $pipe
+     * @return self<T>
+     */
+    private function withPipe(Pipe $pipe): self
+    {
+        return new self($this->enumClass, [...$this->pipeline, $pipe], $this->coerce);
+    }
+
+    /**
+     * @param list<T> $cases
+     * @return self<T>
+     */
+    public function only(array $cases): self
+    {
+        return $this->withPipe(new Only($cases));
+    }
+
+    /**
+     * @param list<T> $cases
+     * @return self<T>
+     */
+    public function not(array $cases): self
+    {
+        return $this->withPipe(new Not($cases));
     }
 
     /**
