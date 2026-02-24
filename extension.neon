@@ -50,6 +50,23 @@ services:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\CoerceBuilderMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Assertions\PhpStan\Resolvers\ZtanStaticMethodReturnTypeExtension
+        arguments:
+            arrayShapeResolver: @Le0daniel\Assertions\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
+            objectShapeResolver: @Le0daniel\Assertions\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
+            unionResolver: @Le0daniel\Assertions\PhpStan\Resolvers\UnionTypeConstructorResolver
+            tupleResolver: @Le0daniel\Assertions\PhpStan\Resolvers\TupleTypeConstructorResolver
+            discriminatedUnionResolver: @Le0daniel\Assertions\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
+            literalResolver: @Le0daniel\Assertions\PhpStan\Resolvers\LiteralTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
         class: Le0daniel\Assertions\PhpStan\ClosureParameterTypeExtension
         tags:
             - phpstan.staticMethodParameterClosureTypeExtension
