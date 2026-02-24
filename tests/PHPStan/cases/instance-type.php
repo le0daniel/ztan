@@ -3,10 +3,10 @@
 namespace Le0daniel\Assertions\Tests\PHPStan\Cases;
 
 use DateTimeImmutable;
-use Le0daniel\Assertions\Types\Scalars\DateTimeStringType;
+use Le0daniel\Assertions\Types\Scalars\InstanceType;
 use function PHPStan\Testing\assertType;
 
-$type = new DateTimeStringType('Y-m-d');
+$type = new InstanceType(DateTimeImmutable::class);
 
 assertType('DateTimeImmutable', $type->parse('x'));
 assertType('Le0daniel\Assertions\Data\ParseError|Le0daniel\Assertions\Data\ParseSuccess<DateTimeImmutable>', $type->safeParse('x'));
@@ -24,9 +24,3 @@ assertType('Le0daniel\Assertions\Types\RefineType<DateTimeImmutable>', $type->re
 assertType('DateTimeImmutable', $type->refine(fn(DateTimeImmutable $v) => $v > new DateTimeImmutable(), 'msg')->parse('x'));
 
 assertType('Le0daniel\Assertions\Types\PreprocessType<DateTimeImmutable>', $type->preprocess(fn($v) => $v));
-
-assertType('Le0daniel\Assertions\Types\Scalars\DateTimeStringType', $type->after(new DateTimeImmutable()));
-assertType('Le0daniel\Assertions\Types\Scalars\DateTimeStringType', $type->before(new DateTimeImmutable()));
-assertType('Le0daniel\Assertions\Types\Scalars\DateTimeStringType', $type->between(new DateTimeImmutable(), new DateTimeImmutable()));
-assertType('Le0daniel\Assertions\Types\Scalars\DateTimeStringType', $type->past());
-assertType('Le0daniel\Assertions\Types\Scalars\DateTimeStringType', $type->future());

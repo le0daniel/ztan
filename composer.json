@@ -3,7 +3,8 @@
     "description": "PHPstan compatible assertions similar to zod",
     "type": "library",
     "require": {
-        "php": "^8.5"
+        "php": "^8.5",
+        "psr/clock": "^1.0"
     },
     "scripts": {
         "check:types": "phpstan --memory-limit=1G analyse src",
