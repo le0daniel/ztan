@@ -7,6 +7,9 @@ use Le0daniel\Assertions\Contracts\Type;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
 
+/**
+ * @implements Type<null>
+ */
 final readonly class NullType implements Type
 {
 
