@@ -7,6 +7,14 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\Pipe\Integers\Gt;
+use Le0daniel\Assertions\Types\Pipe\Integers\Gte;
+use Le0daniel\Assertions\Types\Pipe\Integers\Lt;
+use Le0daniel\Assertions\Types\Pipe\Integers\Lte;
+use Le0daniel\Assertions\Types\Pipe\Integers\MultipleOf;
+use Le0daniel\Assertions\Types\Pipe\Integers\Negative;
+use Le0daniel\Assertions\Types\Pipe\Integers\Positive;
+use Le0daniel\Assertions\Types\Pipe\Integers\Range;
 
 /**
  * @extends BaseType<int>
@@ -21,6 +29,54 @@ final readonly class IntType extends BaseType
         private bool $coerce = false
     )
     {
+    }
+
+    /**
+     * @param Pipe<int> $pipe
+     */
+    private function withPipe(Pipe $pipe): self
+    {
+        return new self([...$this->pipeline, $pipe], $this->coerce);
+    }
+
+    public function gt(int $threshold): self
+    {
+        return $this->withPipe(new Gt($threshold));
+    }
+
+    public function gte(int $threshold): self
+    {
+        return $this->withPipe(new Gte($threshold));
+    }
+
+    public function lt(int $threshold): self
+    {
+        return $this->withPipe(new Lt($threshold));
+    }
+
+    public function lte(int $threshold): self
+    {
+        return $this->withPipe(new Lte($threshold));
+    }
+
+    public function range(int $min, int $max, bool $including = true): self
+    {
+        return $this->withPipe(new Range($min, $max, $including));
+    }
+
+    public function positive(): self
+    {
+        return $this->withPipe(new Positive());
+    }
+
+    public function negative(): self
+    {
+        return $this->withPipe(new Negative());
+    }
+
+    public function multipleOf(int $divisor): self
+    {
+        return $this->withPipe(new MultipleOf($divisor));
     }
 
     public static function coerceValue(mixed $value): mixed

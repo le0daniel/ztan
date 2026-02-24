@@ -2,14 +2,21 @@
 
 namespace Le0daniel\Assertions\Types\Scalars;
 
-use Closure;
 use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Constraints\Constraint;
-use Le0daniel\Assertions\Types\Constraints\TransformPipe;
+use Le0daniel\Assertions\Types\Pipe\Strings\EndsWith;
+use Le0daniel\Assertions\Types\Pipe\Strings\IsEmpty;
+use Le0daniel\Assertions\Types\Pipe\Strings\Lowercase;
+use Le0daniel\Assertions\Types\Pipe\Strings\MaxLength;
+use Le0daniel\Assertions\Types\Pipe\Strings\MinLength;
+use Le0daniel\Assertions\Types\Pipe\Strings\NotEmpty;
+use Le0daniel\Assertions\Types\Pipe\Strings\Regex;
+use Le0daniel\Assertions\Types\Pipe\Strings\StartsWith;
+use Le0daniel\Assertions\Types\Pipe\Strings\Trim;
+use Le0daniel\Assertions\Types\Pipe\Strings\Uppercase;
 
 /**
  * @extends BaseType<string>
@@ -24,6 +31,64 @@ final readonly class StringType extends BaseType
         private bool $coerce = false
     )
     {
+    }
+
+    /**
+     * @param Pipe<string> $pipe
+     */
+    private function withPipe(Pipe $pipe): self
+    {
+        return new self([...$this->pipeline, $pipe], $this->coerce);
+    }
+
+    public function trim(): self
+    {
+        return $this->withPipe(new Trim());
+    }
+
+    public function lowercase(): self
+    {
+        return $this->withPipe(new Lowercase());
+    }
+
+    public function uppercase(): self
+    {
+        return $this->withPipe(new Uppercase());
+    }
+
+    public function minLength(int $length, bool $including = true): self
+    {
+        return $this->withPipe(new MinLength($length, $including));
+    }
+
+    public function maxLength(int $length, bool $including = true): self
+    {
+        return $this->withPipe(new MaxLength($length, $including));
+    }
+
+    public function startsWith(string $prefix): self
+    {
+        return $this->withPipe(new StartsWith($prefix));
+    }
+
+    public function endsWith(string $suffix): self
+    {
+        return $this->withPipe(new EndsWith($suffix));
+    }
+
+    public function regex(string $pattern): self
+    {
+        return $this->withPipe(new Regex($pattern));
+    }
+
+    public function isEmpty(): self
+    {
+        return $this->withPipe(new IsEmpty());
+    }
+
+    public function notEmpty(): self
+    {
+        return $this->withPipe(new NotEmpty());
     }
 
     public static function coerceValue(mixed $value): mixed
@@ -53,49 +118,4 @@ final readonly class StringType extends BaseType
 
         return $value;
     }
-
-    // public function trim(): StringType
-    // {
-    //     return clone($this, [
-    //         'pipeline' => [
-    //             ... $this->pipeline,
-    //             new TransformPipe(fn (string $value) => trim($value)),
-    //         ]
-    //     ]);
-    // }
-
-    // public function notEmpty(): StringType
-    // {
-    //     return clone($this, [
-    //         'pipeline' => [
-    //             ... $this->pipeline,
-    //             new Constraint(
-    //                 static function (string $value): bool {
-    //                     return trim($value) !== '';
-    //                 },
-    //                 'String must not be empty.'
-    //             )
-    //         ]
-    //     ]);
-    // }
-
-    /**
-     * @param positive-int $length
-     */
-    // public function minLength(int $length, bool $including = true): StringType
-    // {
-    //     return clone($this, [
-    //         'pipeline' => [
-    //             ... $this->pipeline,
-    //             new Constraint(
-    //                 static function (string $value) use ($length, $including): bool {
-    //                     return $including
-    //                         ? mb_strlen($value) >= $length
-    //                         : mb_strlen($value) > $length;
-    //                 },
-    //                 "String must be at least {$length} characters long."
-    //             ),
-    //         ]
-    //     ]);
-    // }
 }

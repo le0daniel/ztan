@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Le0daniel\Assertions\Types\Constraints;
+namespace Le0daniel\Assertions\Types\Pipe;
 
 use Closure;
 use Le0daniel\Assertions\Contracts\Context;

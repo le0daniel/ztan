@@ -7,6 +7,7 @@ use Le0daniel\Assertions\Utils\Debug;
 final readonly class Issue
 {
     /**
+     * @param string $message User facing message, should be short and concise, not expose validation details.
      * @param list<int|string> $path
      * @param array<string, mixed> $metadata
      */
