@@ -1,6 +1,6 @@
 {
-    "name": "le0daniel/assertions",
-    "description": "PHPstan compatible assertions similar to zod",
+    "name": "le0daniel/ztan",
+    "description": "PHPstan compatible library similar to zod",
     "type": "library",
     "require": {
         "php": "^8.5",
