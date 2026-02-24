@@ -7,6 +7,8 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use Le0daniel\Assertions\Types\Pipe\Floats\GreaterThan;
+use Le0daniel\Assertions\Types\Pipe\Floats\LowerThan;
 
 /**
  * @extends BaseType<float>
@@ -21,6 +23,61 @@ final readonly class FloatType extends BaseType
         private bool $coerce = false
     )
     {
+    }
+
+    /**
+     * @param Pipe<float> $pipe
+     */
+    private function withPipe(Pipe $pipe): self
+    {
+        return new self([...$this->pipeline, $pipe], $this->coerce);
+    }
+
+    public function gt(float $threshold): self
+    {
+        return $this->withPipe(new GreaterThan($threshold));
+    }
+
+    public function gte(float $threshold): self
+    {
+        return $this->withPipe(new GreaterThan($threshold, including: true));
+    }
+
+    public function lt(float $threshold): self
+    {
+        return $this->withPipe(new LowerThan($threshold));
+    }
+
+    public function lte(float $threshold): self
+    {
+        return $this->withPipe(new LowerThan($threshold, including: true));
+    }
+
+    public function range(float $min, float $max, bool $including = true): self
+    {
+        return $this
+            ->withPipe(new GreaterThan($min, including: $including))
+            ->withPipe(new LowerThan($max, including: $including));
+    }
+
+    public function positive(): self
+    {
+        return $this->withPipe(new GreaterThan(0));
+    }
+
+    public function negative(): self
+    {
+        return $this->withPipe(new LowerThan(0));
+    }
+
+    public function nonnegative(): self
+    {
+        return $this->withPipe(new GreaterThan(0, including: true));
+    }
+
+    public function nonpositive(): self
+    {
+        return $this->withPipe(new LowerThan(0, including: true));
     }
 
     public static function coerceValue(mixed $value): mixed

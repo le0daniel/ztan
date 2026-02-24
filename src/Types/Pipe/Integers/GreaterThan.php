@@ -10,21 +10,23 @@ use Le0daniel\Assertions\Data\Value;
 /**
  * @implements Pipe<int>
  */
-final readonly class Gte implements Pipe
+final readonly class GreaterThan implements Pipe
 {
     public function __construct(
         private int $threshold,
+        private bool $including = false,
     ) {
     }
 
     public function execute(mixed $value, Context $context): int|Value
     {
-        if ($value >= $this->threshold) {
+        if ($this->including ? $value >= $this->threshold : $value > $this->threshold) {
             return $value;
         }
 
         $context->addIssue(Issue::invalidValue('Value is too small.', $value, [
             'threshold' => $this->threshold,
+            'including' => $this->including,
             'actual' => $value,
         ]));
 

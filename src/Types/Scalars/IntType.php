@@ -7,14 +7,9 @@ use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
-use Le0daniel\Assertions\Types\Pipe\Integers\Gt;
-use Le0daniel\Assertions\Types\Pipe\Integers\Gte;
-use Le0daniel\Assertions\Types\Pipe\Integers\Lt;
-use Le0daniel\Assertions\Types\Pipe\Integers\Lte;
+use Le0daniel\Assertions\Types\Pipe\Integers\GreaterThan;
+use Le0daniel\Assertions\Types\Pipe\Integers\LowerThan;
 use Le0daniel\Assertions\Types\Pipe\Integers\MultipleOf;
-use Le0daniel\Assertions\Types\Pipe\Integers\Negative;
-use Le0daniel\Assertions\Types\Pipe\Integers\Positive;
-use Le0daniel\Assertions\Types\Pipe\Integers\Range;
 
 /**
  * @extends BaseType<int>
@@ -41,37 +36,49 @@ final readonly class IntType extends BaseType
 
     public function gt(int $threshold): self
     {
-        return $this->withPipe(new Gt($threshold));
+        return $this->withPipe(new GreaterThan($threshold));
     }
 
     public function gte(int $threshold): self
     {
-        return $this->withPipe(new Gte($threshold));
+        return $this->withPipe(new GreaterThan($threshold, including: true));
     }
 
     public function lt(int $threshold): self
     {
-        return $this->withPipe(new Lt($threshold));
+        return $this->withPipe(new LowerThan($threshold));
     }
 
     public function lte(int $threshold): self
     {
-        return $this->withPipe(new Lte($threshold));
+        return $this->withPipe(new LowerThan($threshold, including: true));
     }
 
     public function range(int $min, int $max, bool $including = true): self
     {
-        return $this->withPipe(new Range($min, $max, $including));
+        return $this
+            ->withPipe(new GreaterThan($min, including: $including))
+            ->withPipe(new LowerThan($max, including: $including));
     }
 
     public function positive(): self
     {
-        return $this->withPipe(new Positive());
+        return $this->withPipe(new GreaterThan(0));
     }
 
     public function negative(): self
     {
-        return $this->withPipe(new Negative());
+        return $this->withPipe(new LowerThan(0));
+    }
+
+    public function nonnegative(): self
+    {
+        return $this->withPipe(new GreaterThan(0, including: true));
+    }
+
+    public function nonpositive(): self
+    {
+        return $this->withPipe(new LowerThan(0, including: true));
     }
 
     public function multipleOf(int $divisor): self
