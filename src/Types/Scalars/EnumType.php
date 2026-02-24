@@ -2,11 +2,13 @@
 
 namespace Le0daniel\Assertions\Types\Scalars;
 
+use BackedEnum;
 use Le0daniel\Assertions\Contracts\BaseType;
 use Le0daniel\Assertions\Contracts\Context;
 use Le0daniel\Assertions\Contracts\Pipe;
 use Le0daniel\Assertions\Data\Issue;
 use Le0daniel\Assertions\Data\Value;
+use TypeError;
 use UnitEnum;
 
 /**
@@ -33,13 +35,21 @@ final readonly class EnumType extends BaseType
      */
     public static function coerceValue(string $enumClass, mixed $value): mixed
     {
-        if (!is_string($value)) {
-            return $value;
+        if (is_string($value)) {
+            foreach ($enumClass::cases() as $case) {
+                if ($case->name === $value) {
+                    return $case;
+                }
+            }
         }
 
-        foreach ($enumClass::cases() as $case) {
-            if ($case->name === $value) {
-                return $case;
+        if (is_subclass_of($enumClass, BackedEnum::class) && (is_string($value) || is_int($value))) {
+            try {
+                $result = $enumClass::tryFrom($value);
+                if ($result !== null) {
+                    return $result;
+                }
+            } catch (TypeError) {
             }
         }
 

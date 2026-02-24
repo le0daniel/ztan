@@ -13,6 +13,11 @@ enum LiteralTestSuit {
     case DIAMONDS;
 }
 
+enum LiteralTestBackedSuit: string {
+    case HEARTS = 'hearts';
+    case DIAMONDS = 'diamonds';
+}
+
 final class LiteralTypeTest extends TestCase
 {
     // --- Without coercion: accepts exact value ---
@@ -222,6 +227,10 @@ final class LiteralTypeTest extends TestCase
 
         // Enum coerce
         yield 'enum HEARTS from string' => [new LiteralType(LiteralTestSuit::HEARTS, coerce: true), 'HEARTS', LiteralTestSuit::HEARTS];
+
+        // Backed enum coerce
+        yield 'backed enum HEARTS from backed value' => [new LiteralType(LiteralTestBackedSuit::HEARTS, coerce: true), 'hearts', LiteralTestBackedSuit::HEARTS];
+        yield 'backed enum HEARTS from case name' => [new LiteralType(LiteralTestBackedSuit::HEARTS, coerce: true), 'HEARTS', LiteralTestBackedSuit::HEARTS];
     }
 
     #[DataProvider('coercionProvider')]
@@ -250,6 +259,9 @@ final class LiteralTypeTest extends TestCase
 
         // Enum coerce: int not coercible
         yield 'enum HEARTS rejects int' => [new LiteralType(LiteralTestSuit::HEARTS, coerce: true), 42];
+
+        // Backed enum coerce: non-matching backed value
+        yield 'backed enum HEARTS rejects diamonds' => [new LiteralType(LiteralTestBackedSuit::HEARTS, coerce: true), 'diamonds'];
     }
 
     #[DataProvider('coercionStillRejectsProvider')]

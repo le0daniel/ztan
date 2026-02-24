@@ -19,6 +19,11 @@ enum TestBackedStatus: string {
     case INACTIVE = 'inactive';
 }
 
+enum TestIntBacked: int {
+    case LOW = 1;
+    case HIGH = 2;
+}
+
 final class EnumTypeTest extends TestCase
 {
     /**
@@ -121,6 +126,62 @@ final class EnumTypeTest extends TestCase
     public function testExecuteWithCoerceStillRejects(mixed $input): void
     {
         $type = new EnumType(TestStatus::class, coerce: true);
+        $context = new ValidationContext();
+
+        $result = $type->execute($input, $context);
+
+        self::assertSame(Value::INVALID, $result);
+        self::assertCount(1, $context->issues);
+        self::assertSame('Invalid value.', $context->issues[0]->message);
+    }
+
+    /**
+     * @return iterable<string, array{mixed, TestBackedStatus|TestIntBacked}>
+     */
+    public static function backedEnumCoerceProvider(): iterable
+    {
+        yield 'string backed: case name ACTIVE' => ['ACTIVE', TestBackedStatus::ACTIVE];
+        yield 'string backed: value active' => ['active', TestBackedStatus::ACTIVE];
+        yield 'string backed: value inactive' => ['inactive', TestBackedStatus::INACTIVE];
+        yield 'string backed: instance' => [TestBackedStatus::ACTIVE, TestBackedStatus::ACTIVE];
+        yield 'int backed: value 1' => [1, TestIntBacked::LOW];
+        yield 'int backed: value 2' => [2, TestIntBacked::HIGH];
+        yield 'int backed: case name LOW' => ['LOW', TestIntBacked::LOW];
+    }
+
+    #[DataProvider('backedEnumCoerceProvider')]
+    public function testBackedEnumCoerce(mixed $input, TestBackedStatus|TestIntBacked $expected): void
+    {
+        $type = new EnumType($expected::class, coerce: true);
+        $context = new ValidationContext();
+
+        $result = $type->execute($input, $context);
+
+        self::assertSame($expected, $result);
+        self::assertSame([], $context->issues);
+    }
+
+    /**
+     * @return iterable<string, array{class-string<TestBackedStatus|TestIntBacked>, mixed}>
+     */
+    public static function backedEnumCoerceStillRejectsProvider(): iterable
+    {
+        yield 'string backed: non-matching value' => [TestBackedStatus::class, 'unknown'];
+        yield 'string backed: int value' => [TestBackedStatus::class, 42];
+        yield 'string backed: null' => [TestBackedStatus::class, null];
+        yield 'string backed: array' => [TestBackedStatus::class, []];
+        yield 'int backed: non-matching int' => [TestIntBacked::class, 99];
+        yield 'int backed: string value' => [TestIntBacked::class, '1'];
+        yield 'int backed: null' => [TestIntBacked::class, null];
+    }
+
+    /**
+     * @param class-string<TestBackedStatus|TestIntBacked> $enumClass
+     */
+    #[DataProvider('backedEnumCoerceStillRejectsProvider')]
+    public function testBackedEnumCoerceStillRejects(string $enumClass, mixed $input): void
+    {
+        $type = new EnumType($enumClass, coerce: true);
         $context = new ValidationContext();
 
         $result = $type->execute($input, $context);
