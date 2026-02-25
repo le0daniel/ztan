@@ -19,7 +19,7 @@ final class ValidationContext implements Context
 
     public function addIssue(Issue $issue): void
     {
-        $this->issues[] = $issue->withPath($this->path);
+        $this->issues[] = $issue->prependPath($this->path);
     }
 
     public function enterPath(int|string $path): void

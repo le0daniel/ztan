@@ -17,7 +17,9 @@ final class IssueTest extends TestCase
         self::assertSame(42, $issue->received);
         self::assertSame([], $issue->path);
         self::assertSame([], $issue->metadata);
-        self::assertSame('Expected string. Received: int<42>', $issue->debugMessage);
+        self::assertNull($issue->debugMessage);
+        self::assertSame('Expected string.', $issue->getMessage());
+        self::assertSame('[InvalidType] Expected string. Received: int<42>.', $issue->getMessage(true));
     }
 
     public function testInvalidTypeWithMetadata(): void
@@ -35,7 +37,9 @@ final class IssueTest extends TestCase
         self::assertSame(IssueType::InvalidValue, $issue->type);
         self::assertSame('bad', $issue->received);
         self::assertSame(['expected' => 'good'], $issue->metadata);
-        self::assertSame("Invalid value. Received: string<'bad'>", $issue->debugMessage);
+        self::assertNull($issue->debugMessage);
+        self::assertSame('Invalid value.', $issue->getMessage());
+        self::assertSame("[InvalidValue] Invalid value. Received: string<'bad'>.", $issue->getMessage(true));
     }
 
     public function testMissingValue(): void
@@ -46,7 +50,9 @@ final class IssueTest extends TestCase
         self::assertSame(IssueType::MissingValue, $issue->type);
         self::assertNull($issue->received);
         self::assertSame(['property' => 'name'], $issue->metadata);
-        self::assertSame('Property name is required.', $issue->debugMessage);
+        self::assertNull($issue->debugMessage);
+        self::assertSame('Property name is required.', $issue->getMessage());
+        self::assertSame('[MissingValue] Property name is required. Received: NULL.', $issue->getMessage(true));
     }
 
     public function testCustom(): void
@@ -56,7 +62,9 @@ final class IssueTest extends TestCase
         self::assertSame('Must be positive.', $issue->message);
         self::assertSame(IssueType::Custom, $issue->type);
         self::assertSame(-5, $issue->received);
-        self::assertSame('Must be positive. Received: int<-5>', $issue->debugMessage);
+        self::assertNull($issue->debugMessage);
+        self::assertSame('Must be positive.', $issue->getMessage());
+        self::assertSame('[Custom] Must be positive. Received: int<-5>.', $issue->getMessage(true));
     }
 
     public function testCustomWithoutReceived(): void
@@ -64,13 +72,28 @@ final class IssueTest extends TestCase
         $issue = Issue::custom('Something went wrong.');
 
         self::assertNull($issue->received);
-        self::assertSame('Something went wrong. Received: NULL', $issue->debugMessage);
+        self::assertNull($issue->debugMessage);
+        self::assertSame('Something went wrong.', $issue->getMessage());
+        self::assertSame('[Custom] Something went wrong. Received: NULL.', $issue->getMessage(true));
+    }
+
+    public function testGetMessageWithDebugMessage(): void
+    {
+        $issue = new Issue(
+            message: 'Expected string.',
+            type: IssueType::InvalidType,
+            received: 42,
+            debugMessage: 'Value came from user input.',
+        );
+
+        self::assertSame('Expected string.', $issue->getMessage());
+        self::assertSame('[InvalidType] Expected string. Received: int<42>. Value came from user input.', $issue->getMessage(true));
     }
 
     public function testWithPath(): void
     {
         $issue = Issue::invalidType('Expected string.', 42);
-        $withPath = $issue->withPath(['user', 'name']);
+        $withPath = $issue->prependPath(['user', 'name']);
 
         self::assertSame(['user', 'name'], $withPath->path);
         self::assertSame([], $issue->path);
@@ -78,7 +101,8 @@ final class IssueTest extends TestCase
         self::assertSame($issue->type, $withPath->type);
         self::assertSame($issue->received, $withPath->received);
         self::assertSame($issue->metadata, $withPath->metadata);
-        self::assertSame($issue->debugMessage, $withPath->debugMessage);
+        self::assertNull($issue->debugMessage);
+        self::assertNull($withPath->debugMessage);
     }
 
     public function testGetPathAsString(): void
@@ -87,14 +111,14 @@ final class IssueTest extends TestCase
 
         self::assertSame('', $issue->getPathAsString());
 
-        $withPath = $issue->withPath(['user', 'name']);
+        $withPath = $issue->prependPath(['user', 'name']);
         self::assertSame('user.name', $withPath->getPathAsString());
     }
 
     public function testGetPathAsStringWithIntSegment(): void
     {
         $issue = Issue::invalidType('Expected string.', 42);
-        $withPath = $issue->withPath(['items', 0, 'name']);
+        $withPath = $issue->prependPath(['items', 0, 'name']);
 
         self::assertSame('items.0.name', $withPath->getPathAsString());
     }

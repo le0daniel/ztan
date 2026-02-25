@@ -3,37 +3,37 @@
 namespace Le0daniel\Ztan\Data;
 
 use Le0daniel\Ztan\Utils\Debug;
+use Le0daniel\Ztan\Utils\Lists;
 
 final readonly class Issue
 {
     /**
-     * @param string $message User facing message, should be short and concise, not expose validation details.
+     * @param string $message User facing message should be short and concise, not expose validation details.
      * @param list<int|string> $path
      * @param array<string, mixed> $metadata
      */
     public function __construct(
-        public string $message,
+        public string    $message,
         public IssueType $type,
-        public array $path = [],
-        public mixed $received = null,
-        public array $metadata = [],
-        public string $debugMessage = '',
-    ) {
+        public array     $path = [],
+        public mixed     $received = null,
+        public array     $metadata = [],
+        public ?string   $debugMessage = null,
+    )
+    {
     }
 
     /**
      * @param list<int|string> $path
      */
-    public function withPath(array $path): self
+    public function prependPath(array $path): self
     {
-        return new self(
-            $this->message,
-            $this->type,
-            $path,
-            $this->received,
-            $this->metadata,
-            $this->debugMessage,
-        );
+        return clone($this, [
+            'path' => [
+                ... $path,
+                ... $this->path,
+            ],
+        ]);
     }
 
     public function getPathAsString(): string
@@ -51,7 +51,6 @@ final readonly class Issue
             IssueType::InvalidType,
             received: $received,
             metadata: $metadata,
-            debugMessage: "{$message} Received: " . Debug::getType($received),
         );
     }
 
@@ -65,7 +64,6 @@ final readonly class Issue
             IssueType::InvalidValue,
             received: $received,
             metadata: $metadata,
-            debugMessage: "{$message} Received: " . Debug::getType($received),
         );
     }
 
@@ -78,7 +76,6 @@ final readonly class Issue
             $message,
             IssueType::MissingValue,
             metadata: $metadata,
-            debugMessage: $message,
         );
     }
 
@@ -92,7 +89,21 @@ final readonly class Issue
             IssueType::Custom,
             received: $received,
             metadata: $metadata,
-            debugMessage: "{$message} Received: " . Debug::getType($received),
         );
+    }
+
+    public function getMessage(bool $withDebugInformation = false): string
+    {
+        if (!$withDebugInformation) {
+            return $this->message;
+        }
+
+        $receivedValue = Debug::getType($this->received);
+        return implode(' ', Lists::filterNullValues([
+            "[{$this->type->name}]",
+            $this->message,
+            "Received: {$receivedValue}.",
+            $this->debugMessage
+        ]));
     }
 }
