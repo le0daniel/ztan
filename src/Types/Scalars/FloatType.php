@@ -95,10 +95,13 @@ final readonly class FloatType extends BaseType
     {
         $value = $this->coerce ? self::coerceValue($value) : $value;
 
-        if (!is_float($value)) {
+        // Integers are also floats, so we need to check for both.
+        if (!is_float($value) && !is_int($value)) {
             $context->addIssue(Issue::invalidType("Expected float.", $value));
             return Value::INVALID;
         }
+
+        $value = (float) $value;
 
         foreach ($this->pipeline as $pipe) {
             $value = $pipe->execute($value, $context);

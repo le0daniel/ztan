@@ -18,6 +18,7 @@ final class FloatTypeTest extends TestCase
         yield 'zero' => [0.0, 0.0];
         yield 'positive float' => [3.14, 3.14];
         yield 'negative float' => [-2.5, -2.5];
+        yield 'integer' => [42, 42.0];
     }
 
     #[DataProvider('validFloatProvider')]
@@ -37,7 +38,6 @@ final class FloatTypeTest extends TestCase
      */
     public static function invalidInputProvider(): iterable
     {
-        yield 'integer' => [42];
         yield 'true' => [true];
         yield 'false' => [false];
         yield 'string' => ['hello'];
