@@ -46,7 +46,7 @@ final readonly class ObjectShapeTypeConstructorResolver implements DynamicStatic
         return new GenericObjectType(ObjectShapeType::class, [$resolvedShape]);
     }
 
-    private function resolvePropertiesObject(PhpStanType $propertiesType): ?PhpStanType
+    public function resolvePropertiesObject(PhpStanType $propertiesType): ?PhpStanType
     {
         $constantArrays = $propertiesType->getConstantArrays();
         if ($constantArrays === []) {

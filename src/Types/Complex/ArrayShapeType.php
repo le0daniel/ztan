@@ -7,7 +7,6 @@ use Le0daniel\Ztan\Contracts\Context;
 use Le0daniel\Ztan\Contracts\Shape;
 use Le0daniel\Ztan\Contracts\Type;
 use Le0daniel\Ztan\Data\Issue;
-use Le0daniel\Ztan\Data\ValidationContext;
 use Le0daniel\Ztan\Data\Value;
 
 /**
@@ -90,6 +89,35 @@ final readonly class ArrayShapeType extends BaseType implements Shape
 
         /** @var TProperties $validatedValue */
         return $validatedValue;
+    }
+
+    /**
+     * @param array<string, Type<mixed>> $fields
+     * @return self<array<string, Type<mixed>>>
+     */
+    public function extend(array $fields): self
+    {
+        /** @var array<string, Type<mixed>> $merged */
+        $merged = [...$this->properties, ...$fields];
+        return new self($merged);
+    }
+
+    /**
+     * @param list<string> $keys
+     * @return self<array<string, Type<mixed>>>
+     */
+    public function omit(array $keys): self
+    {
+        /** @var array<string, Type<mixed>> $filtered */
+        $filtered = array_filter(
+            $this->properties,
+            function (string $key) use ($keys): bool {
+                $cleanKey = str_ends_with($key, '?') ? substr($key, 0, -1) : $key;
+                return !in_array($cleanKey, $keys, true);
+            },
+            ARRAY_FILTER_USE_KEY,
+        );
+        return new self($filtered);
     }
 
     /** @return Type<mixed>|null */

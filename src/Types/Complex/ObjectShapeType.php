@@ -91,6 +91,33 @@ final readonly class ObjectShapeType extends BaseType implements Shape
         return $validatedValue;
     }
 
+    /**
+     * @param array<string, Type<mixed>> $fields
+     * @return self<mixed>
+     */
+    public function extend(array $fields): self
+    {
+        return new self([...$this->properties, ...$fields]);
+    }
+
+    /**
+     * @param list<string> $keys
+     * @return self<mixed>
+     */
+    public function omit(array $keys): self
+    {
+        /** @var array<string, Type<mixed>> $filtered */
+        $filtered = array_filter(
+            $this->properties,
+            function (string $key) use ($keys): bool {
+                $cleanKey = str_ends_with($key, '?') ? substr($key, 0, -1) : $key;
+                return !in_array($cleanKey, $keys, true);
+            },
+            ARRAY_FILTER_USE_KEY,
+        );
+        return new self($filtered);
+    }
+
     /** @return Type<mixed>|null */
     private function findPropertyType(string $name): ?Type
     {

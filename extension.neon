@@ -67,6 +67,25 @@ services:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ArrayShapeTypeMethodResolver
+        arguments:
+            constructorResolver: @Le0daniel\Ztan\PhpStan\Resolvers\ArrayShapeTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Ztan\PhpStan\Resolvers\ObjectShapeTypeMethodResolver
+        arguments:
+            constructorResolver: @Le0daniel\Ztan\PhpStan\Resolvers\ObjectShapeTypeConstructorResolver
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Ztan\PhpStan\Rules\ExtendOmitArgumentRule
+        tags:
+            - phpstan.rules.rule
+
+    -
         class: Le0daniel\Ztan\PhpStan\ClosureParameterTypeExtension
         tags:
             - phpstan.staticMethodParameterClosureTypeExtension
