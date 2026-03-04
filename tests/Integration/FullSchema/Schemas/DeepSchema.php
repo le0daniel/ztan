@@ -41,11 +41,6 @@ final class DeepSchema implements SchemaTestCase
         ]);
     }
 
-    public function expectedPhpStanType(): string
-    {
-        return "array{name: string, email: string, age: int, score: float, isActive: bool, role: 'admin', tags: list<string>, metadata: array<string, int|string>, address: array{street: string, city: string, zip: string, country?: string}, bio?: string|null, coordinates: array{float, float}, status: array{type: 'active', since: string}|array{type: 'inactive', reason: string}, nameLength: int<0, max>}";
-    }
-
     public function passingValues(): iterable
     {
         $base = [

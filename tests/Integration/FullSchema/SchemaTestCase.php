@@ -8,8 +8,6 @@ interface SchemaTestCase
 {
     public function schema(): BaseType;
 
-    public function expectedPhpStanType(): string;
-
     /**
      * @return iterable<string, array{mixed, mixed}>
      */

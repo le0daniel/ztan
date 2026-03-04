@@ -4,18 +4,25 @@ namespace Le0daniel\Ztan\Tests\Integration\FullSchema;
 
 use Le0daniel\Ztan\Data\ParseError;
 use Le0daniel\Ztan\Data\ParseSuccess;
-use Le0daniel\Ztan\Tests\Integration\FullSchema\Schemas\DeepSchema;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class FullSchemaTest extends TestCase
 {
     /** @return list<SchemaTestCase> */
-    private static function allCases(): array
+    public static function allCases(): array
     {
-        return [
-            new DeepSchema(),
-        ];
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__ . '/Schemas'));
+        $classNames = [];
+        foreach ($iterator as $file) {
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+
+            $classNames[] = 'Le0daniel\\Ztan\\Tests\\Integration\\FullSchema\\Schemas\\' . $file->getBasename('.php');
+        }
+
+        return array_map(fn($className) => new $className(), $classNames);
     }
 
     public static function passingProvider(): iterable
@@ -38,13 +45,6 @@ final class FullSchemaTest extends TestCase
         }
     }
 
-    public static function schemaProvider(): iterable
-    {
-        foreach (self::allCases() as $case) {
-            yield $case::class => [$case];
-        }
-    }
-
     #[DataProvider('passingProvider')]
     public function testPassingValues(SchemaTestCase $case, mixed $input, mixed $expected): void
     {
@@ -58,11 +58,5 @@ final class FullSchemaTest extends TestCase
     {
         $result = $case->schema()->safeParse($input);
         self::assertInstanceOf(ParseError::class, $result, 'Expected ParseError but got ParseSuccess');
-    }
-
-    #[DataProvider('schemaProvider')]
-    public function testExpectedPhpStanType(SchemaTestCase $case): void
-    {
-        self::assertNotEmpty($case->expectedPhpStanType(), 'expectedPhpStanType() must return a non-empty string');
     }
 }

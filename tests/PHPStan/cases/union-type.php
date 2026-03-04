@@ -6,6 +6,7 @@ use Le0daniel\Ztan\Types\Complex\ArrayShapeType;
 use Le0daniel\Ztan\Types\Complex\UnionType;
 use Le0daniel\Ztan\Types\Scalars\IntType;
 use Le0daniel\Ztan\Types\Scalars\StringType;
+use Le0daniel\Ztan\Ztan;
 use function PHPStan\Testing\assertType;
 
 $union = new UnionType(new StringType(), new IntType());
@@ -32,3 +33,16 @@ assertType('array{name: string}|int', $withShape->parse('x'));
 
 $single = new UnionType(new StringType());
 assertType('string', $single->parse('x'));
+
+$literalUnion = Ztan::union(
+    Ztan::literal('png'),
+    Ztan::literal('jpg'),
+    Ztan::literal('jpeg'),
+    Ztan::literal('tif'),
+    Ztan::literal('tiff'),
+    Ztan::literal('webp'),
+);
+assertType("'jpeg'|'jpg'|'png'|'tif'|'tiff'|'webp'", $literalUnion->parse('x'));
+
+$otherType = Ztan::arrayShape(['name' => new StringType(), 'format' => $literalUnion]);
+assertType("array{name: string, format: 'jpeg'|'jpg'|'png'|'tif'|'tiff'|'webp'}", $otherType->parse("x"));
