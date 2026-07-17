@@ -24,9 +24,9 @@ final readonly class EnumType extends BaseType
      * @param list<Pipe<T>> $pipeline
      */
     public function __construct(
-        private string $enumClass,
+        public string $enumClass,
         private array $pipeline = [],
-        private bool $coerce = false,
+        public bool $coerce = false,
     )
     {
     }

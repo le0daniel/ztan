@@ -15,7 +15,7 @@ use Le0daniel\Ztan\Data\Value;
 final readonly class TupleType extends BaseType
 {
     /** @var list<Type<mixed>> */
-    private array $types;
+    public array $types;
 
     /**
      * @param Type<mixed> ...$types

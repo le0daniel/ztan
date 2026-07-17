@@ -21,7 +21,7 @@ final readonly class ListType extends BaseType
      * @param list<MinItems|MaxItems> $pipeline
      */
     public function __construct(
-        private Type $type,
+        public Type $type,
         private array $pipeline = [],
     )
     {

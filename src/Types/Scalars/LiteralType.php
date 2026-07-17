@@ -20,9 +20,9 @@ final readonly class LiteralType extends BaseType
      * @param list<Pipe<T>> $pipeline
      */
     public function __construct(
-        private string|int|float|bool|UnitEnum $literal,
+        public string|int|float|bool|UnitEnum $literal,
         private array $pipeline = [],
-        private bool $coerce = false,
+        public bool $coerce = false,
     ) {
     }
 

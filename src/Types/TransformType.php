@@ -6,6 +6,7 @@ use Closure;
 use Le0daniel\Ztan\Contracts\BaseType;
 use Le0daniel\Ztan\Contracts\Context;
 use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Data\Issue;
 use Le0daniel\Ztan\Data\Value;
 
 /**
@@ -22,7 +23,7 @@ final readonly class TransformType extends BaseType
      * @param TransformFn $transformFn
      */
     public function __construct(
-        private Type    $assertion,
+        public Type     $assertion,
         private Closure $transformFn,
     )
     {
@@ -35,6 +36,11 @@ final readonly class TransformType extends BaseType
             return Value::INVALID;
         }
 
-        return ($this->transformFn)($result);
+        try {
+            return ($this->transformFn)($result);
+        } catch (\Throwable $e) {
+            $context->addIssue(Issue::fromException($e));
+            return Value::INVALID;
+        }
     }
 }

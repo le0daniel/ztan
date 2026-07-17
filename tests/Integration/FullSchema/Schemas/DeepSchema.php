@@ -41,6 +41,82 @@ final class DeepSchema implements SchemaTestCase
         ]);
     }
 
+    public function jsonSchema(): ?array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'name' => ['type' => 'string'],
+                'email' => ['type' => 'string'],
+                'age' => ['type' => 'integer'],
+                'score' => ['type' => 'number'],
+                'isActive' => ['type' => 'boolean'],
+                'role' => ['const' => 'admin'],
+                'tags' => ['type' => 'array', 'items' => ['type' => 'string']],
+                'metadata' => [
+                    'type' => 'object',
+                    'additionalProperties' => ['anyOf' => [['type' => 'string'], ['type' => 'integer']]],
+                ],
+                'address' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'street' => ['type' => 'string'],
+                        'city' => ['type' => 'string'],
+                        'zip' => ['type' => 'string'],
+                        'country' => ['type' => 'string'],
+                    ],
+                    'required' => ['street', 'city', 'zip'],
+                    'additionalProperties' => false,
+                ],
+                'bio' => ['anyOf' => [['type' => 'string'], ['type' => 'null']]],
+                'coordinates' => [
+                    'type' => 'array',
+                    'prefixItems' => [['type' => 'number'], ['type' => 'number']],
+                    'items' => false,
+                    'minItems' => 2,
+                ],
+                'status' => [
+                    'anyOf' => [
+                        [
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => ['const' => 'active'],
+                                'since' => ['type' => 'string'],
+                            ],
+                            'required' => ['type', 'since'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => ['const' => 'inactive'],
+                                'reason' => ['type' => 'string'],
+                            ],
+                            'required' => ['type', 'reason'],
+                            'additionalProperties' => false,
+                        ],
+                    ],
+                ],
+                'nameLength' => ['type' => 'string'],
+            ],
+            'required' => [
+                'name',
+                'email',
+                'age',
+                'score',
+                'isActive',
+                'role',
+                'tags',
+                'metadata',
+                'address',
+                'coordinates',
+                'status',
+                'nameLength',
+            ],
+            'additionalProperties' => false,
+        ];
+    }
+
     public function passingValues(): iterable
     {
         $base = [

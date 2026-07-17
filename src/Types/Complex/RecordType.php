@@ -21,7 +21,7 @@ final readonly class RecordType extends BaseType
      * @param list<MinRecords|MaxRecords> $pipeline
      */
     public function __construct(
-        private Type $valueType,
+        public Type $valueType,
         private array $pipeline = [],
     )
     {

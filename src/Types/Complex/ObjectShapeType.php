@@ -16,7 +16,7 @@ use Le0daniel\Ztan\Data\Value;
 final readonly class ObjectShapeType extends BaseType implements Shape
 {
     /** @var array<string, Type<mixed>> */
-    private array $properties;
+    public array $properties;
 
     /**
      * Expects a key-value array where the key is the property name and the value is the property type.

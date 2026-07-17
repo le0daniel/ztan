@@ -21,7 +21,7 @@ final readonly class DiscriminatedUnionType extends BaseType
      */
     public function __construct(
         private string $discriminatorProperty,
-        private array $shapes,
+        public array $shapes,
     ) {
     }
 

@@ -2,7 +2,9 @@
 
 namespace Le0daniel\Ztan\Types\Scalars;
 
+use Le0daniel\Ztan\Contracts\CarriesMetadata;
 use Le0daniel\Ztan\Contracts\Context;
+use Le0daniel\Ztan\Contracts\HasMetadata;
 use Le0daniel\Ztan\Contracts\Type;
 use Le0daniel\Ztan\Data\Issue;
 use Le0daniel\Ztan\Data\Value;
@@ -10,8 +12,9 @@ use Le0daniel\Ztan\Data\Value;
 /**
  * @implements Type<null>
  */
-final readonly class NullType implements Type
+final readonly class NullType implements Type, HasMetadata
 {
+    use CarriesMetadata;
 
     public function execute(mixed $value, Context $context): mixed
     {

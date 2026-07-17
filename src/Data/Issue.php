@@ -23,6 +23,24 @@ final readonly class Issue
     {
     }
 
+    public static function fromException(\Throwable $throwable): self
+    {
+        return new self(
+            'Internal error',
+            IssueType::Custom,
+            metadata: [
+                'exception' => [
+                    'class' => get_class($throwable),
+                    'message' => $throwable->getMessage(),
+                    'file' => $throwable->getFile(),
+                    'line' => $throwable->getLine(),
+                    'trace' => $throwable->getTrace(),
+                ],
+            ],
+            debugMessage: $throwable->getMessage(),
+        );
+    }
+
     /**
      * @param list<int|string> $path
      */

@@ -6,6 +6,8 @@ use Closure;
 use Le0daniel\Ztan\Contracts\BaseType;
 use Le0daniel\Ztan\Contracts\Context;
 use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Data\Issue;
+use Le0daniel\Ztan\Data\Value;
 
 /**
  * @template TValue
@@ -19,7 +21,7 @@ final readonly class PreprocessType extends BaseType
      * @param ProcessingFn $processor
      */
     public function __construct(
-        private Type    $assertion,
+        public Type     $assertion,
         private Closure $processor,
     )
     {
@@ -27,8 +29,15 @@ final readonly class PreprocessType extends BaseType
 
     public function execute(mixed $value, Context $context): mixed
     {
+        try {
+            $preprocessedValue = ($this->processor)($value);
+        } catch (\Throwable $throwable) {
+            $context->addIssue(Issue::fromException($throwable));
+            return Value::INVALID;
+        }
+
         return $this->assertion->execute(
-            ($this->processor)($value),
+            $preprocessedValue,
             $context
         );
     }

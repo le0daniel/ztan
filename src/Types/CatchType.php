@@ -6,7 +6,9 @@ use Closure;
 use Le0daniel\Ztan\Contracts\BaseType;
 use Le0daniel\Ztan\Contracts\Context;
 use Le0daniel\Ztan\Contracts\Type;
+use Le0daniel\Ztan\Data\Issue;
 use Le0daniel\Ztan\Data\Value;
+use Throwable;
 
 /**
  * @template TValue
@@ -21,7 +23,7 @@ final readonly class CatchType extends BaseType
      * @param CatchFn $value
      */
     public function __construct(
-        private Type  $assertion,
+        public Type   $assertion,
         private mixed $value,
     )
     {
@@ -34,8 +36,13 @@ final readonly class CatchType extends BaseType
             return $result;
         }
 
-        return $this->value instanceof Closure
-            ? ($this->value)()
-            : $this->value;
+        try {
+            return $this->value instanceof Closure
+                ? ($this->value)()
+                : $this->value;
+        } catch (Throwable $throwable) {
+            $context->addIssue(Issue::fromException($throwable));
+            return Value::INVALID;
+        }
     }
 }

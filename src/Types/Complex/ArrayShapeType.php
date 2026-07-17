@@ -32,7 +32,7 @@ final readonly class ArrayShapeType extends BaseType implements Shape
      * @param TProperties $properties
      */
     public function __construct(
-        private array $properties,
+        public array $properties,
     )
     {
     }

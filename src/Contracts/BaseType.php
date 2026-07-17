@@ -18,8 +18,10 @@ use Le0daniel\Ztan\Types\TransformType;
  * @template TValue
  * @implements Type<TValue>
  */
-abstract readonly class BaseType implements Type
+abstract readonly class BaseType implements Type, HasMetadata
 {
+    use CarriesMetadata;
+
     /**
      * @param mixed $value
      * @return TValue

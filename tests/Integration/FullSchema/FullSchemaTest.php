@@ -4,6 +4,7 @@ namespace Le0daniel\Ztan\Tests\Integration\FullSchema;
 
 use Le0daniel\Ztan\Data\ParseError;
 use Le0daniel\Ztan\Data\ParseSuccess;
+use Le0daniel\Ztan\JsonSchema\JsonSchemaPrinter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -58,5 +59,23 @@ final class FullSchemaTest extends TestCase
     {
         $result = $case->schema()->safeParse($input);
         self::assertInstanceOf(ParseError::class, $result, 'Expected ParseError but got ParseSuccess');
+    }
+
+    public static function schemaProvider(): iterable
+    {
+        foreach (self::allCases() as $case) {
+            yield $case::class => [$case];
+        }
+    }
+
+    #[DataProvider('schemaProvider')]
+    public function testJsonSchema(SchemaTestCase $case): void
+    {
+        $expected = $case->jsonSchema();
+        if ($expected === null) {
+            self::markTestSkipped('No JSON schema expectation provided.');
+        }
+
+        self::assertSame($expected, new JsonSchemaPrinter()->printToArray($case->schema()));
     }
 }

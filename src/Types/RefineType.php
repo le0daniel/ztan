@@ -20,7 +20,7 @@ final readonly class RefineType extends BaseType
      * @param string $message
      */
     public function __construct(
-        private Type $type,
+        public Type $type,
         private \Closure $refiner,
         private string $message
     )

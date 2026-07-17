@@ -21,6 +21,11 @@ final class LiteralUnionSchema implements SchemaTestCase
         );
     }
 
+    public function jsonSchema(): ?array
+    {
+        return ['enum' => ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'webp']];
+    }
+
     public function passingValues(): iterable
     {
         return [

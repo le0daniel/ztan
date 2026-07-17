@@ -13,6 +13,17 @@ parameters:
 
     level: 10
 
-#    ignoreErrors:
+    # The CarriesMetadata trait's readonly $meta is initialized lazily via clone()
+    # in meta(); PHPStan attributes the uninitialized-readonly error to each class
+    # using the trait (at the trait's line number), so it is suppressed per user.
+    ignoreErrors:
+        -
+            identifier: property.uninitializedReadonly
+            paths:
+                - src/Contracts/BaseType.php
+                - src/Types/Scalars/MixedType.php
+                - src/Types/Scalars/NeverType.php
+                - src/Types/Scalars/NullType.php
+
 #    excludePaths:
 

@@ -16,7 +16,7 @@ final readonly class NullableType extends BaseType
      * @param Type<TAssertionValue> $assertion
      */
     public function __construct(
-        private Type $assertion,
+        public Type $assertion,
     )
     {
     }
