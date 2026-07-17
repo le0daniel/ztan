@@ -15,6 +15,7 @@ use Le0daniel\Ztan\Types\Complex\RecordType;
 use Le0daniel\Ztan\Types\Complex\TupleType;
 use Le0daniel\Ztan\Types\Complex\UnionType;
 use Le0daniel\Ztan\Types\NullableType;
+use Le0daniel\Ztan\Types\PipeType;
 use Le0daniel\Ztan\Types\PreprocessType;
 use Le0daniel\Ztan\Types\RefineType;
 use Le0daniel\Ztan\Types\Scalars\BoolType;
@@ -105,6 +106,9 @@ final readonly class JsonSchemaPrinter
             $type instanceof TransformType => $this->io === Io::Input
                 ? $this->printType($type->assertion)
                 : throw UnsupportedTypeException::forType($type, $this->io),
+            $type instanceof PipeType => $this->printType(
+                $this->io === Io::Input ? $type->firstType : $type->secondType,
+            ),
             default => throw UnsupportedTypeException::forType($type, $this->io),
         };
     }

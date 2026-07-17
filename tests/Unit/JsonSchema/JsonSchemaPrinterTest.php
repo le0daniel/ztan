@@ -264,6 +264,12 @@ final class JsonSchemaPrinterTest extends TestCase
             Ztan::string()->nullable()->meta(description: 'top'),
             ['anyOf' => [['type' => 'string'], ['type' => 'null']], 'description' => 'top'],
         ];
+
+        // ── Pipe ─────────────────────────────────────────────────────────────
+        yield 'pipe with identical printable sides' => [
+            Ztan::string()->pipe(Ztan::string()->minLength(3)),
+            ['type' => 'string'],
+        ];
     }
 
     /**
@@ -275,6 +281,52 @@ final class JsonSchemaPrinterTest extends TestCase
     {
         self::assertSame($expected, new JsonSchemaPrinter(Io::Input)->printToArray($schema));
         self::assertSame($expected, new JsonSchemaPrinter(Io::Output)->printToArray($schema));
+    }
+
+    /**
+     * @return iterable<string, array{Type<mixed>, array<string, mixed>, array<string, mixed>}>
+     */
+    public static function modeDivergentProvider(): iterable
+    {
+        yield 'pipe prints its input side in input mode and its output side in output mode' => [
+            Ztan::string()
+                ->transform(fn (string $value): mixed => json_decode($value, true))
+                ->pipe(Ztan::arrayShape(['name' => Ztan::string()])),
+            ['type' => 'string'],
+            [
+                'type' => 'object',
+                'properties' => ['name' => ['type' => 'string']],
+                'required' => ['name'],
+                'additionalProperties' => false,
+            ],
+        ];
+        yield 'chained pipes print the outermost ends' => [
+            Ztan::string()->pipe(Ztan::int())->pipe(Ztan::float()),
+            ['type' => 'string'],
+            ['type' => 'number'],
+        ];
+        yield 'meta before pipe annotates the input side only' => [
+            Ztan::string()->meta(description: 'raw')->pipe(Ztan::int()),
+            ['type' => 'string', 'description' => 'raw'],
+            ['type' => 'integer'],
+        ];
+        yield 'meta after pipe annotates the top level in both modes' => [
+            Ztan::string()->pipe(Ztan::int())->meta(description: 'top'),
+            ['type' => 'string', 'description' => 'top'],
+            ['type' => 'integer', 'description' => 'top'],
+        ];
+    }
+
+    /**
+     * @param Type<mixed> $schema
+     * @param array<string, mixed> $expectedInput
+     * @param array<string, mixed> $expectedOutput
+     */
+    #[DataProvider('modeDivergentProvider')]
+    public function testModeDivergentPrinting(Type $schema, array $expectedInput, array $expectedOutput): void
+    {
+        self::assertSame($expectedInput, new JsonSchemaPrinter(Io::Input)->printToArray($schema));
+        self::assertSame($expectedOutput, new JsonSchemaPrinter(Io::Output)->printToArray($schema));
     }
 
     /**
@@ -304,6 +356,10 @@ final class JsonSchemaPrinterTest extends TestCase
         ];
         yield 'transform prints its input side' => [
             Ztan::string()->transform(fn (string $value): int => strlen($value)),
+            ['type' => 'string'],
+        ];
+        yield 'pipe whose output side is a transform' => [
+            Ztan::string()->pipe(Ztan::string()->transform(fn (string $value): int => strlen($value))),
             ['type' => 'string'],
         ];
     }
@@ -356,6 +412,16 @@ final class JsonSchemaPrinterTest extends TestCase
 
         $this->expectException(UnsupportedTypeException::class);
         new JsonSchemaPrinter(Io::Output)->printToArray($schema);
+    }
+
+    public function testPipeWithAnUnprintableInputSidePrintsOnlyInOutputMode(): void
+    {
+        $schema = Ztan::instance(DateTimeImmutable::class)->pipe(Ztan::string());
+
+        self::assertSame(['type' => 'string'], new JsonSchemaPrinter(Io::Output)->printToArray($schema));
+
+        $this->expectException(UnsupportedTypeException::class);
+        new JsonSchemaPrinter(Io::Input)->printToArray($schema);
     }
 
     public function testExceptionMessageNamesTheTypeAndTheMode(): void

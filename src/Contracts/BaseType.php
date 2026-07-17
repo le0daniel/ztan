@@ -10,6 +10,7 @@ use Le0daniel\Ztan\Data\ValidationException;
 use Le0daniel\Ztan\Data\Value;
 use Le0daniel\Ztan\Types\CatchType;
 use Le0daniel\Ztan\Types\NullableType;
+use Le0daniel\Ztan\Types\PipeType;
 use Le0daniel\Ztan\Types\PreprocessType;
 use Le0daniel\Ztan\Types\RefineType;
 use Le0daniel\Ztan\Types\TransformType;
@@ -99,5 +100,15 @@ abstract readonly class BaseType implements Type, HasMetadata
     public function preprocess(Closure $processor): PreprocessType
     {
         return new PreprocessType($this, $processor);
+    }
+
+    /**
+     * @template TSecond
+     * @param Type<TSecond> $through
+     * @return PipeType<TValue, TSecond>
+     */
+    public function pipe(Type $through): PipeType
+    {
+        return new PipeType($this, $through);
     }
 }
