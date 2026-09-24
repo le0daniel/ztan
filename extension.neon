@@ -50,6 +50,16 @@ services:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 
     -
+        class: Le0daniel\Ztan\PhpStan\Resolvers\InferredTemplateStaticCallResolver
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
+        class: Le0daniel\Ztan\PhpStan\Resolvers\InferredTemplateMethodResolver
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
         class: Le0daniel\Ztan\PhpStan\Resolvers\CoerceBuilderMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
@@ -63,6 +73,7 @@ services:
             tupleResolver: @Le0daniel\Ztan\PhpStan\Resolvers\TupleTypeConstructorResolver
             discriminatedUnionResolver: @Le0daniel\Ztan\PhpStan\Resolvers\DiscriminatedUnionTypeConstructorResolver
             literalResolver: @Le0daniel\Ztan\PhpStan\Resolvers\LiteralTypeConstructorResolver
+            inferredTemplateResolver: @Le0daniel\Ztan\PhpStan\Resolvers\InferredTemplateStaticCallResolver
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
 

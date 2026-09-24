@@ -21,6 +21,7 @@ final readonly class ZtanStaticMethodReturnTypeExtension implements DynamicStati
         TupleTypeConstructorResolver $tupleResolver,
         DiscriminatedUnionTypeConstructorResolver $discriminatedUnionResolver,
         LiteralTypeConstructorResolver $literalResolver,
+        InferredTemplateStaticCallResolver $inferredTemplateResolver,
     ) {
         $this->resolverMap = [
             'arrayShape' => $arrayShapeResolver,
@@ -29,6 +30,8 @@ final readonly class ZtanStaticMethodReturnTypeExtension implements DynamicStati
             'tuple' => $tupleResolver,
             'discriminatedUnion' => $discriminatedUnionResolver,
             'literal' => $literalResolver,
+            'list' => $inferredTemplateResolver,
+            'record' => $inferredTemplateResolver,
         ];
     }
 

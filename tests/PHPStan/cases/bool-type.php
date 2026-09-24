@@ -16,8 +16,8 @@ assertType('bool|null', $type->nullable()->parse('x'));
 assertType('Le0daniel\Ztan\Types\CatchType<bool>', $type->catch(false));
 assertType('bool', $type->catch(false)->parse('x'));
 
-assertType('Le0daniel\Ztan\Types\TransformType<bool, int>', $type->transform(fn(bool $v) => $v ? 1 : 0));
-assertType('int', $type->transform(fn(bool $v) => $v ? 1 : 0)->parse('x'));
+assertType('Le0daniel\Ztan\Types\TransformType<bool, 0|1>', $type->transform(fn(bool $v) => $v ? 1 : 0));
+assertType('0|1', $type->transform(fn(bool $v) => $v ? 1 : 0)->parse('x'));
 
 assertType('Le0daniel\Ztan\Types\RefineType<bool>', $type->refine(fn(bool $v) => $v === true, 'msg'));
 assertType('bool', $type->refine(fn(bool $v) => $v === true, 'msg')->parse('x'));
