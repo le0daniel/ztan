@@ -17,7 +17,7 @@ final readonly class DiscriminatedUnionType extends BaseType
 {
     /**
      * @param string $discriminatorProperty
-     * @param list<Shape&Type<mixed>> $shapes
+     * @param list<Shape&Type<TValue>> $shapes
      */
     public function __construct(
         private string $discriminatorProperty,

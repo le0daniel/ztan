@@ -33,9 +33,10 @@ final readonly class CoerceBuilder
     }
 
     /**
-     * @template T of string|int|float|bool|UnitEnum
-     * @param T $literal
-     * @return LiteralType<T>
+     * @template TScalar of string|int|float|bool = never
+     * @template TEnum of UnitEnum = never
+     * @param TScalar|TEnum $literal
+     * @return LiteralType<TScalar|TEnum>
      */
     public function literal(string|int|float|bool|UnitEnum $literal): LiteralType
     {

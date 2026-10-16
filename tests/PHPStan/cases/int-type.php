@@ -16,8 +16,8 @@ assertType('int|null', $type->nullable()->parse('x'));
 assertType('Le0daniel\Ztan\Types\CatchType<int>', $type->catch(0));
 assertType('int', $type->catch(0)->parse('x'));
 
-assertType('Le0daniel\Ztan\Types\TransformType<int, lowercase-string&numeric-string&uppercase-string>', $type->transform(fn(int $v) => (string) $v));
-assertType('lowercase-string&numeric-string&uppercase-string', $type->transform(fn(int $v) => (string) $v)->parse('x'));
+assertType('Le0daniel\Ztan\Types\TransformType<int, decimal-int-string>', $type->transform(fn(int $v) => (string) $v));
+assertType('decimal-int-string', $type->transform(fn(int $v) => (string) $v)->parse('x'));
 
 assertType('Le0daniel\Ztan\Types\RefineType<int>', $type->refine(fn(int $v) => $v > 0, 'msg'));
 assertType('int', $type->refine(fn(int $v) => $v > 0, 'msg')->parse('x'));

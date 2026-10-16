@@ -5,8 +5,10 @@ namespace Le0daniel\Ztan\PhpStan\Resolvers;
 use Le0daniel\Ztan\Contracts\BaseType;
 use Le0daniel\Ztan\PhpStan\InferredTemplates;
 use Le0daniel\Ztan\Types\CatchType;
+use Le0daniel\Ztan\Types\Complex\DiscriminatedUnionType;
 use Le0daniel\Ztan\Types\Complex\ListType;
 use Le0daniel\Ztan\Types\Complex\RecordType;
+use Le0daniel\Ztan\Types\Complex\UnionType;
 use Le0daniel\Ztan\Types\NullableType;
 use Le0daniel\Ztan\Types\PipeType;
 use Le0daniel\Ztan\Types\PreprocessType;
@@ -32,6 +34,8 @@ final readonly class InferredTemplateStaticCallResolver implements DynamicStatic
         RefineType::class,
         PreprocessType::class,
         PipeType::class,
+        UnionType::class,
+        DiscriminatedUnionType::class,
     ];
 
     public function getClass(): string

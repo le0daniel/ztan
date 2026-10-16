@@ -18,7 +18,7 @@ final readonly class UnionType extends BaseType
     public array $types;
 
     /**
-     * @param Type<mixed> ...$types
+     * @param Type<TValue> ...$types
      */
     public function __construct(Type ...$types)
     {

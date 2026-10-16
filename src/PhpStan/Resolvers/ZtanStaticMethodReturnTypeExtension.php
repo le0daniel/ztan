@@ -17,19 +17,15 @@ final readonly class ZtanStaticMethodReturnTypeExtension implements DynamicStati
     public function __construct(
         ArrayShapeTypeConstructorResolver $arrayShapeResolver,
         ObjectShapeTypeConstructorResolver $objectShapeResolver,
-        UnionTypeConstructorResolver $unionResolver,
         TupleTypeConstructorResolver $tupleResolver,
-        DiscriminatedUnionTypeConstructorResolver $discriminatedUnionResolver,
-        LiteralTypeConstructorResolver $literalResolver,
         InferredTemplateStaticCallResolver $inferredTemplateResolver,
     ) {
         $this->resolverMap = [
             'arrayShape' => $arrayShapeResolver,
             'objectShape' => $objectShapeResolver,
-            'union' => $unionResolver,
+            'union' => $inferredTemplateResolver,
             'tuple' => $tupleResolver,
-            'discriminatedUnion' => $discriminatedUnionResolver,
-            'literal' => $literalResolver,
+            'discriminatedUnion' => $inferredTemplateResolver,
             'list' => $inferredTemplateResolver,
             'record' => $inferredTemplateResolver,
         ];

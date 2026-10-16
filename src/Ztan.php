@@ -64,9 +64,10 @@ final class Ztan
     }
 
     /**
-     * @template T of string|int|float|bool|UnitEnum
-     * @param T $literal
-     * @return LiteralType<T>
+     * @template TScalar of string|int|float|bool = never
+     * @template TEnum of UnitEnum = never
+     * @param TScalar|TEnum $literal
+     * @return LiteralType<TScalar|TEnum>
      */
     public static function literal(string|int|float|bool|UnitEnum $literal): LiteralType
     {
@@ -137,8 +138,9 @@ final class Ztan
     }
 
     /**
-     * @param Type<mixed> ...$types
-     * @phpstan-ignore missingType.generics (resolved by ZtanStaticMethodReturnTypeExtension)
+     * @template TValue
+     * @param Type<TValue> ...$types
+     * @return UnionType<TValue>
      */
     public static function union(Type ...$types): UnionType
     {
@@ -155,9 +157,10 @@ final class Ztan
     }
 
     /**
+     * @template TValue
      * @param string $discriminator
-     * @param list<Shape&Type<mixed>> $shapes
-     * @phpstan-ignore missingType.generics (resolved by ZtanStaticMethodReturnTypeExtension)
+     * @param list<Shape&Type<TValue>> $shapes
+     * @return DiscriminatedUnionType<TValue>
      */
     public static function discriminatedUnion(string $discriminator, array $shapes): DiscriminatedUnionType
     {
